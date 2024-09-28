@@ -6,12 +6,12 @@ import MemoHero2 from "@/icons/Hero2";
 export default function Hero() {
   return (
     <div className="bg-black text-white min-h-screen flex flex-col justify-center p-8">
-      <div className="max-w-6xl mx-auto">
+      <div className="sm:max-w-6xl mx-auto">
         {/* Main Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Hero Content */}
           <div className="space-y-6">
-            <h1 className="text-6xl font-extrabold leading-tight tracking-wide">
+            <h1 className="sm:text-6xl text-4xl font-extrabold leading-tight tracking-wide">
               Revolutionize Your Solar Experience
             </h1>
             <p className="text-lg text-gray-300">
@@ -57,8 +57,10 @@ export default function Hero() {
               },
             ].map((item, index) => (
               <div key={index} className="flex items-start space-x-4">
-                <h2 className="text-4xl font-bold text-white">{item.title}</h2>
-                <p className="text-lg">{item.description}</p>
+                <h2 className="sm:text-4xl text-2xl font-bold text-white">
+                  {item.title}
+                </h2>
+                <p className="sm:text-lg text-base">{item.description}</p>
               </div>
             ))}
           </div>

@@ -40,12 +40,15 @@ const faqItems = [
 
 export default function FAQsection() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-center mb-2">
+    <div className="container hsection my-5 px-4 py-8">
+      <h2 className="sm:text-3xl text-xl font-bold text-center mb-2">
         Your Questions Answered
       </h2>
       <p className="text-center text-gray-600 mb-8">Explore Common Inquiries</p>
-      <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto">
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full px-4 sm:px-0 max-w-3xl mx-auto">
         {faqItems.map((item, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
             <AccordionTrigger className="text-left">

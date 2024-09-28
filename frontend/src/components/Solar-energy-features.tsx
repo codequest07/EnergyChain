@@ -6,16 +6,11 @@ import MemoStrike from "@/icons/Strike";
 
 export default function SolarEnergy() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-center mb-6">
+    <div className="hsection px-4 my-12 py-8">
+      <h1 className="sm:text-4xl text-xl font-bold text-center mb-6">
         Unlock the Power of Solar Energy
       </h1>
-      <div className="flex justify-center space-x-4 mb-12">
-        <Button className="bg-green-500 hover:bg-green-600 text-white">
-          Get Started Now
-        </Button>
-        <Button variant="outline">Discover More Benefits</Button>
-      </div>
+
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <div className="flex items-start space-x-4 p-6">

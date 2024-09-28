@@ -40,8 +40,8 @@ const testimonials = [
 
 export default function TestimonialsSection() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-center mb-8">
+    <div className="hsection px-4 py-8">
+      <h2 className="sm:text-3xl text-xl font-bold text-center mb-8">
         What Our Users Are Saying
       </h2>
       <div className="grid md:grid-cols-2 gap-6 mb-8">
