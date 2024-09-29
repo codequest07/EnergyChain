@@ -13,24 +13,8 @@ contract Energy {
     error InsufficientTokenBalance();
     error InsufficientBuyerCredits();
     error TransferFailed();
-error OnlyOwnerAllowed();
-    error OnlyProducerAllowed();
-    error InsufficientBalance();
-    
-    error NotAProducer();
-    error WithdrawalFailed();
-    error OnlyOwnerAllowed();
-    error OnlyProducerAllowed();
-    error InsufficientBalance();
-    
-    error NotAProducer();
-    error WithdrawalFailed();
     address public owner;
     address public energyToken;
-
-    // Array to store all producer addresses
-    address[] private allProducerAddresses;
-
     constructor(address _energyToken) {
         owner = msg.sender;
         energyToken = _energyToken;
@@ -57,10 +41,10 @@ error OnlyOwnerAllowed();
 event PriceUpdated(address producer, uint pricePerUnit);
     event EnergyCreditsPurchased(address buyer, address producer, uint creditAmount);
 event EnergyCreditsTransferred(address from, address to, uint creditAmount);
-    event Withdraw(address producer, uint amount);
+
     // Mapping to store registered producers
     mapping(address => Producer) public producers;
-// Mapping to store balances of users
+    // Mapping to store balances of users
     mapping(address => uint) public balances;
 
 // Mapping to store energy credits for buyers
@@ -68,7 +52,6 @@ event EnergyCreditsTransferred(address from, address to, uint creditAmount);
 mapping(address => uint) public energyUsage;
 
 // Producers can register their available energy credits and the price per unit
-
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (_energyCredits == 0 || _pricePerUnit == 0) revert ZeroValueNotAllowed();
@@ -110,7 +93,7 @@ function updatePricePerUnit(uint _newPrice) external {
         emit PriceUpdated(msg.sender, _newPrice);
 }
 
-// Buyers can purchase energy credits from a specific producer
+    =// Buyers can purchase energy credits from a specific producer
     // This transfers tokens from the buyer to the producer and updates both parties' credit balances
     function purchaseEnergyCredits(address producer, uint creditAmount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
@@ -179,8 +162,9 @@ function updatePricePerUnit(uint _newPrice) external {
     function transferEnergyCredits(address to, uint creditAmount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (to == address(0)) revert AddressZeroDetected();
-        if (creditAmount == 0) revert ZeroValueNotAllowed();        
-        // Making sure the sender has enough credits to transfer
+    if (creditAmount == 0) revert ZeroValueNotAllowed();
+
+        // Make sure the sender has enough credits to transfer
         uint senderCredits = buyerCredits[msg.sender][msg.sender];
         if (senderCredits < creditAmount) revert InsufficientBuyerCredits();
 
