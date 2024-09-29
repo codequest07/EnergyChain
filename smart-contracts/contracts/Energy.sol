@@ -66,7 +66,7 @@ event EnergyUsageTracked(address buyer, uint usageAmount);
     mapping(address => mapping(address => uint)) public buyerCredits; // producer => buyer => credits
 mapping(address => uint) public energyUsage;
 
-// Function for producers to register their energy credits and price
+// Producers can register their available energy credits and the price per unit
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (_energyCredits == 0 || _pricePerUnit == 0) revert ZeroValueNotAllowed();
