@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract Energy {
 
@@ -22,6 +23,11 @@ contract Energy {
     constructor(address _energyToken) {
         owner = msg.sender;
         energyToken = _energyToken;
+    }
+
+    modifier onlyOwner {
+        require(msg.sender == owner, "Only owner can call this function");
+        _;
     }
 
     struct Producer {
@@ -47,14 +53,12 @@ contract Energy {
     mapping(address => mapping(address => uint)) public buyerCredits; // producer => buyer => credits
     mapping(address => uint) public energyUsage;
 
-// Producers can register their available energy credits and the price per unit
+    // Producers can register their available energy credits and the price per unit
 
 
     mapping(address => uint) public energyUsage;
 
     // Producers can register their available energy credits and the price per unit
-
-
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (_energyCredits == 0 || _pricePerUnit == 0) revert ZeroValueNotAllowed();
@@ -95,7 +99,7 @@ contract Energy {
 
     // Buyers can purchase energy credits from a specific producer
     // This transfers tokens from the buyer to the contract and credits the producer's balance
-    function purchaseEnergyCredits(address producer, uint creditAmount) external {
+    function purchaseEnergyCredits(address producer, uint creditAmount) external nonReentrant {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (producer == address(0)) revert AddressZeroDetected();
         if (creditAmount == 0) revert ZeroValueNotAllowed();
@@ -129,7 +133,7 @@ contract Energy {
     }
 
     // Producers can withdraw their token balance from the contract and with a platform fee
-    function withdraw() external {
+    function withdraw() external nonReentrant {
         Producer memory _producer = producers[msg.sender];
         
         // Ensure the caller is a producer
@@ -158,8 +162,6 @@ contract Energy {
     }
 
     // Buyers can transfer energy credits to another user
-
-
     function transferEnergyCredits(address to, uint creditAmount) external {
 
         if (msg.sender == address(0)) revert AddressZeroDetected();
@@ -204,9 +206,8 @@ contract Energy {
         return buyerCredits[producer][buyer];
     }
 
-
     // Get the token balance of this contract
-    function getContractBalance() external view returns (uint) {
+    function getContractBalance() external view onlyOwner returns (uint) {
         return IERC20(energyToken).balanceOf(address(this));
     }
 
