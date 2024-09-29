@@ -59,6 +59,7 @@ mapping(address => uint) public energyUsage;
 
 // Producers can register their available energy credits and the price per unit
 
+
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (_energyCredits == 0 || _pricePerUnit == 0) revert ZeroValueNotAllowed();
@@ -104,7 +105,7 @@ mapping(address => uint) public energyUsage;
 
 // Buyers can purchase energy credits from a specific producer
     // This transfers tokens from the buyer to the contract and credits the producer's balance
-    function purchaseEnergyCredits(address producer, uint creditAmount) external {
+    function purchaseEnergyCredits(address producer, uint creditAmount) external nonReentrant {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (producer == address(0)) revert AddressZeroDetected();
         if (creditAmount == 0) revert ZeroValueNotAllowed();
@@ -133,6 +134,34 @@ mapping(address => uint) public energyUsage;
         // Log the purchase of energy credits
         emit EnergyCreditsPurchased(msg.sender, producer, creditAmount);
     }
+    // Producers can withdraw their token balance from the contract and with a platform fee
+    function withdraw() external {
+        Producer memory _producer = producers[msg.sender];
+        
+        // Ensure the caller is a producer
+        if (_producer.pricePerUnit == 0) revert NotAProducer();
+        
+        uint producerBalance = _producer.balance;
+        if (producerBalance == 0) revert InsufficientBuyerCredits();
+        
+        // Calculate the fee and final withdrawal amount
+        uint fee = (producerBalance * platformFeePercentage) / 100;
+        uint amountToWithdraw = producerBalance - fee;
+
+        // Update the producer's balance in the contract
+        producers[msg.sender].balance = 0;
+
+        // Transfer the amount to the producer
+        bool success = IERC20(energyToken).transfer(msg.sender, amountToWithdraw);
+        if (!success) revert WithdrawalFailed();
+
+        emit Withdraw(msg.sender, amountToWithdraw);
+    }
+
+    // Get the current balance of a producer (for displaying on the dashboard)
+    function getBalance(address producer) external view returns (uint) {
+        return producers[producer].balance;
+    }
 
     // Buyers can transfer energy credits to another user
     function transferEnergyCredits(address to, uint creditAmount) external {
@@ -155,4 +184,9 @@ mapping(address => uint) public energyUsage;
     // Log the transfer of energy credits
         emit EnergyCreditsTransferred(msg.sender, to, producer, creditAmount);
     }
+// Get the token balance of this contract
+    function getContractBalance() external view returns (uint) {
+        return IERC20(energyToken).balanceOf(address(this));
+    }
+
 }
