@@ -13,16 +13,7 @@ contract Energy {
     error InsufficientTokenBalance();
     error InsufficientBuyerCredits();
     error TransferFailed();
-    error OnlyOwnerAllowed();
-    error OnlyProducerAllowed();
-    error InsufficientBalance();
-    error CallerNotProducer();
-    error UpdatedpriceIsSame();
-    
-    error NotAProducer();
-    error WithdrawalFailed();
-
-    address public owner;
+address public owner;
     address public energyToken;
 
     // Array to store all producer addresses
@@ -53,10 +44,7 @@ contract Energy {
     event UnitsUpdated(address producer, uint energyCredits);
 event PriceUpdated(address producer, uint pricePerUnit);
     event EnergyCreditsPurchased(address buyer, address producer, uint creditAmount);
-    event EnergyCreditsTransferred(address from, address to, uint creditAmount);
-event EnergyUsageTracked(address buyer, uint usageAmount);
-    event ProducerWithdrawal(address producer, uint amount);
-
+event EnergyCreditsTransferred(address from, address to, uint creditAmount);
     // Mapping to store registered producers
     mapping(address => Producer) public producers;
 // Mapping to store balances of users
@@ -173,14 +161,14 @@ function updatePricePerUnit(uint _newPrice) external {
     }
 
     // Buyers can transfer energy credits to another user
-// This moves energy credits from the sender’s balance to the recipient’s balance
     function transferEnergyCredits(address to, uint creditAmount) external {
+
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (to == address(0)) revert AddressZeroDetected();
-        if (creditAmount == 0) revert ZeroValueNotAllowed();
-
-    // Make sure the sender has enough credits to transfer
+        if (creditAmount == 0) revert ZeroValueNotAllowed();        
+        // Making sure the sender has enough credits to transfer
         uint senderCredits = buyerCredits[msg.sender][msg.sender];
+   
         if (senderCredits < creditAmount) revert InsufficientBuyerCredits();
 
         // Reduce the sender’s credit balance for that producer
