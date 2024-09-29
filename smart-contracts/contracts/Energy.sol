@@ -114,22 +114,23 @@ contract Energy {
 
     // Buyers can transfer energy credits to another user
     // This moves energy credits from the sender’s balance to the recipient’s balance
-    function transferEnergyCredits(address to, uint creditAmount) external {
+    function transferEnergyCredits(address producer, address to, uint creditAmount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (to == address(0)) revert AddressZeroDetected();
         if (creditAmount == 0) revert ZeroValueNotAllowed();
 
-        // Make sure the sender has enough credits to transfer
-        uint senderCredits = buyerCredits[msg.sender][msg.sender];
+        // Make sure the sender has enough credits for the specified producer
+        uint senderCredits = buyerCredits[producer][msg.sender];
         if (senderCredits < creditAmount) revert InsufficientBuyerCredits();
 
-        // Reduce the sender’s credit balance
-        buyerCredits[msg.sender][msg.sender] -= creditAmount;
+        // Reduce the sender’s credit balance for that producer
+        buyerCredits[producer][msg.sender] -= creditAmount;
 
-        // Increase the recipient’s credit balance
-        buyerCredits[msg.sender][to] += creditAmount;
+        // Increase the recipient’s credit balance for that producer
+        buyerCredits[producer][to] += creditAmount;
 
         // Log the transfer of energy credits
-        emit EnergyCreditsTransferred(msg.sender, to, creditAmount);
+        emit EnergyCreditsTransferred(msg.sender, to, producer, creditAmount);
     }
+
 }
