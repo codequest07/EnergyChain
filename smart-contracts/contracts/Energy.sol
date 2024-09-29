@@ -12,18 +12,9 @@ contract Energy {
     error InsufficientTokenBalance();
     error InsufficientBuyerCredits();
     error TransferFailed();
-error OnlyOwnerAllowed();
-    error OnlyProducerAllowed();
-    error InsufficientBalance();
-    
     error NotAProducer();
     error WithdrawalFailed();
-    error OnlyOwnerAllowed();
-    error OnlyProducerAllowed();
-    error InsufficientBalance();
-    
-    error NotAProducer();
-    error WithdrawalFailed();
+
     address public owner;
     address public energyToken;
     uint public platformFeePercentage = 2; 
@@ -44,6 +35,11 @@ error OnlyOwnerAllowed();
     event PriceUpdated(address producer, uint pricePerUnit);
     event EnergyCreditsPurchased(address buyer, address producer, uint creditAmount);
     event EnergyCreditsTransferred(address from, address to, uint creditAmount);
+
+    
+    event Withdraw(address producer, uint amount);
+
+
     // Mapping to store registered producers
     mapping(address => Producer) public producers;
 
@@ -52,6 +48,12 @@ error OnlyOwnerAllowed();
     mapping(address => uint) public energyUsage;
 
 // Producers can register their available energy credits and the price per unit
+
+
+    mapping(address => uint) public energyUsage;
+
+    // Producers can register their available energy credits and the price per unit
+
 
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
@@ -156,13 +158,17 @@ error OnlyOwnerAllowed();
     }
 
     // Buyers can transfer energy credits to another user
-// This moves energy credits from the sender’s balance to the recipient’s balance
+
+
     function transferEnergyCredits(address to, uint creditAmount) external {
+
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (to == address(0)) revert AddressZeroDetected();
-        if (creditAmount == 0) revert ZeroValueNotAllowed();        
+        if (creditAmount == 0) revert ZeroValueNotAllowed();
+        
         // Making sure the sender has enough credits to transfer
         uint senderCredits = buyerCredits[msg.sender][msg.sender];
+   
         if (senderCredits < creditAmount) revert InsufficientBuyerCredits();
 
         // Reduce the sender’s credit balance for that producer
