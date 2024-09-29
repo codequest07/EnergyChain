@@ -1,6 +1,6 @@
-# Icarus: Decentralized Energy Marketplace DApp on Scroll Sepolia
+# Energy Chain: Decentralized Energy Marketplace DApp on Scroll Sepolia
 
- The **Decentralized Energy Marketplace** aims to revolutionize energy trading by creating a transparent, efficient, and user-friendly platform for energy producers and consumers. This innovative project will leverage blockchain technology to establish a single smart contract where energy producers can list their available energy credits, allowing for seamless and transparent transactions.
+The **Decentralized Energy Marketplace** aims to revolutionize energy trading by creating a transparent, efficient, and user-friendly platform for energy producers and consumers. This innovative project will leverage blockchain technology to establish a single smart contract where energy producers can list their available energy credits, allowing for seamless and transparent transactions.
 
 Deployed Smart contract on Scroll Sepolia Testnet: .....deployed link
 
