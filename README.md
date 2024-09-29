@@ -1,4 +1,4 @@
-# Icarus: Decentralized Energy Marketplace DApp on Scroll Sepolia
+# Energy Chain: Decentralized Energy Marketplace DApp on Scroll Sepolia
 
 ## Problem we aim to solve!
 
