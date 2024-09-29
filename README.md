@@ -54,6 +54,7 @@ The project is divided into two main directories:
 1. `frontend`: Contains the frontend React application
 2. `smart-contracts`: Contains the smart contract and related files
 
+```
 .
 ├── frontend/
 │ ├── src/
@@ -69,6 +70,7 @@ The project is divided into two main directories:
 │ ├── hardhat.config.ts
 │ └── package.json
 └── README.md
+```
 
 ## Smart Contracts
 
