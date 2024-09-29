@@ -108,7 +108,7 @@ npm install
 For detailed instructions on setting up the frontend, please refer to the [Client README](./frontend/README.md).
 
 ### Smart Contract Setup (smart-contracts directory)
-For detailed instructions on setting up and deploying the smart contracts, please refer to the [Hardhat Contracts README](./smart-contracts/README.md).
+For detailed instructions on setting up and deploying the smart contracts, please refer to the [Hardhat Contracts README](./hardhat-contracts/README.md).
 
 ## Environment Variables
 
