@@ -24,21 +24,26 @@ This project aims to create a decentralized energy trading platform that allows 
 
 ## Project Structure
 
+```
 .
-├── frontend/
-│ ├── src/
-│ │ ├── app/
-│ │ ├── components/
-│ │ ├── lib/
-│ │ └── ...
-│ ├── package.json
-│ └── tailwind.config.ts
-├── smart-contracts/
-│ ├── contracts/
-│ │ └── ICAR.sol
-│ ├── hardhat.config.ts
-│ └── package.json
+├── frontend/ 
+│ ├── public/ 
+│ ├── src/ 
+│ │ ├── app/ 
+│ │ ├── components/ 
+│ │ ├── lib/ 
+│ │ └── ... 
+│ ├── package.json 
+│ └── tailwind.config.ts 
+├── smart-contracts/ 
+│ ├── contracts/ 
+│ │ ├── Energy.sol 
+│ │ └── ICAR.sol 
+│ ├── hardhat.config.ts 
+│ ├── ... 
+│ └── package.json 
 └── README.md
+```
 
 ## Smart Contracts
 
@@ -55,27 +60,32 @@ The project uses a custom ERC20 token called ICAR (Icar Token) for energy tradin
 ### Smart Contracts Setup
 
 1. Navigate to the `smart-contracts` directory:
+
    ```
    cd smart-contracts
    ```
 
 2. Install dependencies:
+
    ```
    npm install
    ```
 
 3. Create a `.env` file in the `smart-contracts` directory with the following content:
+
    ```
    SCROLL_RPC_URL=<Your Alchemy Scroll Testnet RPC URL>
    ACCOUNT_PRIVATE_KEY=<Your Ethereum account private key>
    ```
 
 4. Compile the smart contracts:
+
    ```
    npx hardhat compile
    ```
 
 5. Deploy the smart contracts to Scroll Testnet:
+
    ```
    npx hardhat run scripts/deploy.ts --network scroll-sepolia
    ```
@@ -83,26 +93,30 @@ The project uses a custom ERC20 token called ICAR (Icar Token) for energy tradin
 ### Frontend Setup
 
 1. Navigate to the `frontend` directory:
+
    ```
    cd frontend
    ```
 
 2. Install dependencies:
+
    ```
    npm install
    ```
 
 3. Create a `.env.local` file in the `frontend` directory with the following content:
+
    ```
    NEXT_PUBLIC_ALCHEMY_ID=<Your Alchemy API Key>
    ```
 
 4. Run the development server:
+
    ```
    npm run dev
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+5. Open <http://localhost:3000> in your browser to see the application.
 
 ## Deployment
 
