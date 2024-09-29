@@ -12,13 +12,6 @@ contract Energy {
     error InsufficientTokenBalance();
     error InsufficientBuyerCredits();
     error TransferFailed();
-    error OnlyOwnerAllowed();
-    error OnlyProducerAllowed();
-    error InsufficientBalance();
-    
-    error NotAProducer();
-    error WithdrawalFailed();
-
     address public owner;
     address public energyToken;
     uint public platformFeePercentage = 2; 
@@ -46,7 +39,7 @@ contract Energy {
     mapping(address => mapping(address => uint)) public buyerCredits; // producer => buyer => credits
     mapping(address => uint) public energyUsage;
 
-// Function for producers to register their energy credits and price
+// Producers can register their available energy credits and the price per unit
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (_energyCredits == 0 || _pricePerUnit == 0) revert ZeroValueNotAllowed();
