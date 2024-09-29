@@ -42,8 +42,15 @@ uint public platformFeePercentage = 2;
 event PriceUpdated(address producer, uint pricePerUnit);
     event EnergyCreditsPurchased(address buyer, address producer, uint creditAmount);
 event EnergyCreditsTransferred(address from, address to, uint creditAmount);
+<<<<<<< HEAD
+    event EnergyUsageTracked(address buyer, uint usageAmount);
+    event ProducerWithdrawal(address producer, uint amount);
+=======
+
     
     event Withdraw(address producer, uint amount);
+>>>>>>> 78a73a966b99d140c48d4c4ebc6cfbb8eab1b61f
+
 
     // Mapping to store registered producers
     mapping(address => Producer) public producers;
@@ -53,13 +60,14 @@ mapping(address => uint) public energyUsage;
     mapping (address => bool) public isUserProducer;
 
 // Producers can register their available energy credits and the price per unit
+<<<<<<< HEAD
+=======
 
 
     mapping(address => uint) public energyUsage;
 
-// Producers can register their available energy credits and the price per unit
-
-
+    // Producers can register their available energy credits and the price per unit
+>>>>>>> 78a73a966b99d140c48d4c4ebc6cfbb8eab1b61f
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (_energyCredits == 0 || _pricePerUnit == 0) revert ZeroValueNotAllowed();
@@ -104,8 +112,13 @@ mapping(address => uint) public energyUsage;
 }
 
 // Buyers can purchase energy credits from a specific producer
+<<<<<<< HEAD
+    // This transfers tokens from the buyer to the producer and updates both parties' credit balances
+    function purchaseEnergyCredits(address producer, uint creditAmount) external {
+=======
     // This transfers tokens from the buyer to the contract and credits the producer's balance
     function purchaseEnergyCredits(address producer, uint creditAmount) external nonReentrant {
+>>>>>>> 78a73a966b99d140c48d4c4ebc6cfbb8eab1b61f
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (producer == address(0)) revert AddressZeroDetected();
         if (creditAmount == 0) revert ZeroValueNotAllowed();
@@ -134,8 +147,12 @@ mapping(address => uint) public energyUsage;
         // Log the purchase of energy credits
         emit EnergyCreditsPurchased(msg.sender, producer, creditAmount);
     }
+    // Buyers can transfer energy credits to another user
+    // This moves energy credits from the sender’s balance to the recipient’s balance
+    function transferEnergyCredits(address producer, address to, uint creditAmount) external {
+=======
     // Producers can withdraw their token balance from the contract and with a platform fee
-    function withdraw() external {
+    function withdraw() external nonReentrant {
         Producer memory _producer = producers[msg.sender];
         
         // Ensure the caller is a producer
@@ -166,6 +183,7 @@ mapping(address => uint) public energyUsage;
     // Buyers can transfer energy credits to another user
     function transferEnergyCredits(address to, uint creditAmount) external {
 
+>>>>>>> 78a73a966b99d140c48d4c4ebc6cfbb8eab1b61f
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (to == address(0)) revert AddressZeroDetected();
         ]if (creditAmount == 0) revert ZeroValueNotAllowed();
