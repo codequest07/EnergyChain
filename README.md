@@ -58,6 +58,26 @@ The project is divided into two main directories:
 
 1. `frontend`: Contains the frontend React application
 2. `smart-contracts`: Contains the smart contract and related files
+.
+├── frontend/
+│ ├── src/
+│ │ ├── app/
+│ │ ├── components/
+│ │ ├── lib/
+│ │ └── ...
+│ ├── package.json
+│ └── tailwind.config.ts
+├── smart-contracts/
+│ ├── contracts/
+│ │ └── ICAR.sol
+│ ├── hardhat.config.ts
+│ └── package.json
+└── README.md
+
+## Smart Contracts
+
+The project uses a custom ERC20 token called ICAR (Icar Token) for energy trading. The smart contract is located in `smart-contracts/contracts/ICAR.sol`.
+
 ## Setup and Installation
 
 ### Prerequisites
