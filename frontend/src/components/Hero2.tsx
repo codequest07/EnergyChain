@@ -5,7 +5,7 @@ import Link from "next/link";
 const Hero2 = () => {
   return (
     <div className="bg-black">
-      <section className="container mx-auto px-4 py-12 sm:py-20 flex flex-col md:flex-row items-center">
+      <section className="container hsection mx-auto px-4 py-12 sm:py-20 flex flex-col md:flex-row items-center">
         <div className="md:w-1/2 mb-8 md:mb-0">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
             Decentralized Energy Trading Platform
