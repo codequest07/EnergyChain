@@ -1,10 +1,20 @@
 # Energy Chain: Decentralized Energy Marketplace DApp on Scroll Sepolia
 
-The **Decentralized Energy Marketplace** aims to revolutionize energy trading by creating a transparent, efficient, and user-friendly platform for energy producers and consumers. This innovative project will leverage blockchain technology to establish a single smart contract where energy producers can list their available energy credits, allowing for seamless and transparent transactions.
+## Project Overview
+
+The **Decentralized Energy Marketplace** aims to revolutionize energy trading by creating a transparent, efficient, and user-friendly platform for energy producers and consumers. This innovative project will leverage blockchain technology to establish a single smart contract where energy producers can list their available energy credits, allowing for seamless and transparent transactions. The platform is built on the **SCROLL network**, leveraging its scalability and efficiency for energy transactions provided by the **ALCHEMY RPC-URL**
 
 Deployed Smart contract on Scroll Sepolia Testnet: .....deployed link
 
 Live Link to interact: live-link.on.vercel
+
+### Objectives
+
+1. Facilitate peer-to-peer energy trading
+2. Promote sustainable energy usage
+3. Create a user-friendly interface for energy transactions
+4. Ensure secure and transparent energy trading using blockchain technology
+5. Build a community-driven marketplace for renewable energy
 
 **Key Features:**
 
@@ -18,12 +28,22 @@ Live Link to interact: live-link.on.vercel
 
 5. **Usage and Balance Tracking**: The platform will provide users with intuitive tools to monitor their available energy credits and usage in real-time, promoting informed decision-making and efficient energy management.
 
+## UX Features
+
+- User-friendly dashboard for energy trading
+- Real-time energy listings
+- Secure blockchain-based transactions
+- Community-driven marketplace
+- Integration with Rainbow Kit for easy wallet connection
+
+
 ## Technologies Used
 
-- Frontend: React.js with Vite, Wagmi, Ethers.js
+- Frontend: Next.js, Typescript, Wagmi, Ethers.js
+- Styling: Tailwind CSS
 - Smart Contracts: Solidity
 - Development Environment: Hardhat
-- Network: Scroll Sepolia
+- Blockchain Network: Scroll (Testnet)
 - RPC Provider: Alchemy
 - Deployment: Hardhat Ignition
 
@@ -33,6 +53,26 @@ The project is divided into two main directories:
 
 1. `frontend`: Contains the frontend React application
 2. `smart-contracts`: Contains the smart contract and related files
+
+.
+├── frontend/
+│ ├── src/
+│ │ ├── app/
+│ │ ├── components/
+│ │ ├── lib/
+│ │ └── ...
+│ ├── package.json
+│ └── tailwind.config.ts
+├── smart-contracts/
+│ ├── contracts/
+│ │ └── ICAR.sol
+│ ├── hardhat.config.ts
+│ └── package.json
+└── README.md
+
+## Smart Contracts
+
+The project uses a custom ERC20 token called ICAR (Icar Token) for energy trading. The smart contract is located in `smart-contracts/contracts/ICAR.sol`.
 
 ## Setup and Installation
 
@@ -47,15 +87,60 @@ The project is divided into two main directories:
 ```bash
 git clone https://github.com/codequest07/Icarus.git
 cd Icarus
+npm install
 ```
 
 ### Frontend Setup (frontend directory)
 
-For detailed instructions on setting up the frontend, please refer to the [Client README](./frontend/README.md).
+1. Navigate to the `frontend` directory:
+   ```
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Create a `.env.local` file in the `frontend` directory with the following content:
+   ```
+   NEXT_PUBLIC_ALCHEMY_ID=<Your Alchemy API Key>
+   ```
+
+4. Run the development server:
+   ```
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
 
 ### Smart Contract Setup (smart-contracts directory)
 
-For detailed instructions on setting up and deploying the smart contracts, please refer to the [Hardhat Contracts README](./smart-contracts/README.md).
+1. Navigate to the `smart-contracts` directory:
+   ```
+   cd smart-contracts
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Create a `.env` file in the `smart-contracts` directory with the following content:
+   ```
+   SCROLL_RPC_URL=<Your Alchemy Scroll Testnet RPC URL>
+   ACCOUNT_PRIVATE_KEY=<Your Ethereum account private key>
+   ```
+
+4. Compile the smart contracts:
+   ```
+   npx hardhat compile
+   ```
+
+## Deployment
+
+The smart contracts are deployed to the Scroll Testnet using Alchemy's RPC URLs and API. Make sure to update the `hardhat.config.ts` file with the correct network configurations before deployment.
 
 ## Environment Variables
 
@@ -63,7 +148,7 @@ Create a `.env` file in the `smart-contracts` directory with the following varia
 
 ```
 ALCHEMY_SCROLL_RPC_URL=your_alchemy_scroll_rpc_url
-WALLET_KEY=your_wallet_private_key
+ACCOUNT_PRIVATE_KEY=your_wallet_private_key
 SCROLLSCAN_API_KEY=your_scrollscan_api_key
 ```
 
