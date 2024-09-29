@@ -12,7 +12,7 @@ contract Energy {
     error InsufficientTokenBalance();
     error InsufficientBuyerCredits();
     error TransferFailed();
-error NotAProducer();
+    error NotAProducer();
     error WithdrawalFailed();
 
     address public owner;
@@ -34,7 +34,7 @@ error NotAProducer();
     event UnitsUpdated(address producer, uint energyCredits);
     event PriceUpdated(address producer, uint pricePerUnit);
     event EnergyCreditsPurchased(address buyer, address producer, uint creditAmount);
-    event EnergyCreditsTransferred(address from, address to, uint creditAmount);    
+    event EnergyCreditsTransferred(address from, address to, uint creditAmount);
     event Withdraw(address producer, uint amount);
 
     // Mapping to store registered producers
@@ -44,7 +44,7 @@ error NotAProducer();
     mapping(address => mapping(address => uint)) public buyerCredits; // producer => buyer => credits
     mapping(address => uint) public energyUsage;
 
-// Producers can register their available energy credits and the price per unit
+    // Function for producers to register their energy credits and price
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (_energyCredits == 0 || _pricePerUnit == 0) revert ZeroValueNotAllowed();
@@ -152,7 +152,8 @@ error NotAProducer();
 
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (to == address(0)) revert AddressZeroDetected();
-        if (creditAmount == 0) revert ZeroValueNotAllowed();        
+        if (creditAmount == 0) revert ZeroValueNotAllowed();
+
         // Making sure the sender has enough credits to transfer
         uint senderCredits = buyerCredits[msg.sender][msg.sender];
    
