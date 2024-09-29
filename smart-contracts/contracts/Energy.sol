@@ -12,12 +12,13 @@ contract Energy {
     error InsufficientTokenBalance();
     error InsufficientBuyerCredits();
     error TransferFailed();
-    error NotAProducer();
-    error WithdrawalFailed();
+    error OnlyOwnerAllowed();
+    error OnlyProducerAllowed();
+    error InsufficientBalance();
+    
 
     address public owner;
     address public energyToken;
-    uint public platformFeePercentage = 2; 
 
     constructor(address _energyToken) {
         owner = msg.sender;
@@ -27,7 +28,6 @@ contract Energy {
     struct Producer {
         uint energyCredits;
         uint pricePerUnit;
-        uint balance; 
     }
 
     event ProducerRegistered(address producer, uint energyCredits, uint pricePerUnit);
@@ -35,13 +35,14 @@ contract Energy {
     event PriceUpdated(address producer, uint pricePerUnit);
     event EnergyCreditsPurchased(address buyer, address producer, uint creditAmount);
     event EnergyCreditsTransferred(address from, address to, uint creditAmount);
-
-    
-    event Withdraw(address producer, uint amount);
-
+    event EnergyUsageTracked(address buyer, uint usageAmount);
+    event ProducerWithdrawal(address producer, uint amount);
 
     // Mapping to store registered producers
     mapping(address => Producer) public producers;
+
+    // Mapping to store balances of users
+    mapping(address => uint) public balances;
 
     // Mapping to store energy credits for buyers
     mapping(address => mapping(address => uint)) public buyerCredits; // producer => buyer => credits
@@ -53,8 +54,6 @@ contract Energy {
     mapping(address => uint) public energyUsage;
 
     // Producers can register their available energy credits and the price per unit
-
-
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (_energyCredits == 0 || _pricePerUnit == 0) revert ZeroValueNotAllowed();
@@ -63,7 +62,7 @@ contract Energy {
         if (producers[msg.sender].energyCredits != 0) revert ProducerAlreadyRegistered();
         
         // Register the producer with the provided details
-        producers[msg.sender] = Producer(_energyCredits, _pricePerUnit, 0);
+        producers[msg.sender] = Producer(_energyCredits, _pricePerUnit);
         
         // Log the producer registration
         emit ProducerRegistered(msg.sender, _energyCredits, _pricePerUnit);
@@ -94,7 +93,7 @@ contract Energy {
     }
 
     // Buyers can purchase energy credits from a specific producer
-    // This transfers tokens from the buyer to the contract and credits the producer's balance
+    // This transfers tokens from the buyer to the producer and updates both parties' credit balances
     function purchaseEnergyCredits(address producer, uint creditAmount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (producer == address(0)) revert AddressZeroDetected();
@@ -111,15 +110,12 @@ contract Energy {
         // Check if the buyer has enough tokens to make the purchase
         if (IERC20(energyToken).balanceOf(msg.sender) < totalCost) revert InsufficientTokenBalance();
         
-        // Transfer the tokens from the buyer to the contract (instead of the producer directly)
-        bool success = IERC20(energyToken).transferFrom(msg.sender, address(this), totalCost);
+        // Transfer the tokens from the buyer to the producer
+        bool success = IERC20(energyToken).transferFrom(msg.sender, producer, totalCost);
         if (!success) revert TransferFailed();
 
         // Deduct the sold credits from the producer's balance
         producers[producer].energyCredits -= creditAmount;
-
-        // Add the equivalent amount to the producer's balance in the contract
-        producers[producer].balance += totalCost;
 
         // Add the purchased credits to the buyer's balance
         buyerCredits[producer][msg.sender] += creditAmount;
@@ -128,47 +124,15 @@ contract Energy {
         emit EnergyCreditsPurchased(msg.sender, producer, creditAmount);
     }
 
-    // Producers can withdraw their token balance from the contract and with a platform fee
-    function withdraw() external {
-        Producer memory _producer = producers[msg.sender];
-        
-        // Ensure the caller is a producer
-        if (_producer.pricePerUnit == 0) revert NotAProducer();
-        
-        uint producerBalance = _producer.balance;
-        if (producerBalance == 0) revert InsufficientBuyerCredits();
-        
-        // Calculate the fee and final withdrawal amount
-        uint fee = (producerBalance * platformFeePercentage) / 100;
-        uint amountToWithdraw = producerBalance - fee;
-
-        // Update the producer's balance in the contract
-        producers[msg.sender].balance = 0;
-
-        // Transfer the amount to the producer
-        bool success = IERC20(energyToken).transfer(msg.sender, amountToWithdraw);
-        if (!success) revert WithdrawalFailed();
-
-        emit Withdraw(msg.sender, amountToWithdraw);
-    }
-
-    // Get the current balance of a producer (for displaying on the dashboard)
-    function getBalance(address producer) external view returns (uint) {
-        return producers[producer].balance;
-    }
-
     // Buyers can transfer energy credits to another user
-
-
     function transferEnergyCredits(address to, uint creditAmount) external {
 
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (to == address(0)) revert AddressZeroDetected();
         if (creditAmount == 0) revert ZeroValueNotAllowed();
-        
-        // Making sure the sender has enough credits to transfer
-        uint senderCredits = buyerCredits[msg.sender][msg.sender];
-   
+
+        // Make sure the sender has enough credits for the specified producer
+        uint senderCredits = buyerCredits[producer][msg.sender];
         if (senderCredits < creditAmount) revert InsufficientBuyerCredits();
 
         // Reduce the sender’s credit balance for that producer
@@ -177,6 +141,7 @@ contract Energy {
         // Increase the recipient’s credit balance for that producer
         buyerCredits[producer][to] += creditAmount;
 
+        // Log the transfer of energy credits
         emit EnergyCreditsTransferred(msg.sender, to, creditAmount);
     }
 
