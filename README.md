@@ -18,8 +18,7 @@ check out our live demo video here: https://www.loom.com/share/0b3fa8026eec4d1fb
 
 The **Decentralized Energy Marketplace** aims to revolutionize energy trading by creating a transparent, efficient, and user-friendly platform for energy producers and consumers. This innovative project will leverage blockchain technology to establish a single smart contract where energy producers can list their available energy credits, allowing for seamless and transparent transactions. The platform is built on the **SCROLL network**, leveraging its scalability and efficiency for energy transactions provided by the **ALCHEMY RPC-URL**
 
-Deployed Smart contract on Scroll Sepolia Testnet: https://sepolia.scrollscan.com/address/0xA1103E6490ab174036392EbF5c798C9DaBAb24EE
-https://sepolia.scrollscan.com/address/0x2C0457F82B57148e8363b4589bb3294b23AE7625#code
+Deployed Smart contract on Scroll Sepolia Testnet: .....deployed link
 
 Live Link to interact: https://energyy-chain.vercel.app/
 
@@ -69,30 +68,6 @@ The project is divided into two main directories:
 
 1. `frontend`: Contains the frontend React application
 2. `smart-contracts`: Contains the smart contract and related files
-
-```
-.
-├── frontend/
-│ ├── src/
-│ │ ├── app/
-│ │ ├── components/
-│ │ ├── lib/
-│ │ └── ...
-│ ├── package.json
-│ └── tailwind.config.ts
-├── smart-contracts/
-│ ├── contracts/
-│ │ └── Energy.sol
-│ │ └── ICAR.sol
-│ ├── hardhat.config.ts
-│ └── package.json
-└── README.md
-```
-
-## Smart Contracts
-
-The project uses a custom ERC20 token called ICAR (Icar Token) for energy trading. The smart contract is located in `smart-contracts/contracts/ICAR.sol`.
-
 ## Setup and Installation
 
 ### Prerequisites
@@ -110,10 +85,10 @@ npm install
 ```
 
 ### Frontend Setup (frontend directory)
-For detailed instructions on setting up the frontend, please refer to the [Client README](./client/README.md).
+For detailed instructions on setting up the frontend, please refer to the [Client README](./frontend/README.md).
 
 ### Smart Contract Setup (smart-contracts directory)
-For detailed instructions on setting up and deploying the smart contracts, please refer to the [Hardhat Contracts README](./hardhat-contracts/README.md).
+For detailed instructions on setting up and deploying the smart contracts, please refer to the [Hardhat Contracts README](./smart-contracts/README.md).
 
 ## Environment Variables
 
