@@ -33,11 +33,6 @@ error OnlyOwnerAllowed();
         _;
     }
 
-    modifier onlyProducer {
-        require(isUserProducer[msg.sender], "Caller is not a producer");
-        _;
-    }
-
     struct Producer {
         address producerAddress;
         uint energyCredits;
@@ -117,6 +112,9 @@ mapping(address => uint) public energyUsage;
 }
 
 // Buyers can purchase energy credits from a specific producer
+    // This transfers tokens from the buyer to the producer and updates both parties' credit balances
+    function purchaseEnergyCredits(address producer, uint creditAmount) external {
+=======
     // This transfers tokens from the buyer to the contract and credits the producer's balance
     function purchaseEnergyCredits(address producer, uint creditAmount) external nonReentrant {
         if (msg.sender == address(0)) revert AddressZeroDetected();
@@ -148,6 +146,35 @@ mapping(address => uint) public energyUsage;
         emit EnergyCreditsPurchased(msg.sender, producer, creditAmount);
     }
 
+    // Producers can withdraw their token balance from the contract and with a platform fee
+    function withdraw() external nonReentrant {
+        Producer memory _producer = producers[msg.sender];
+        
+        // Ensure the caller is a producer
+        if (_producer.pricePerUnit == 0) revert NotAProducer();
+        
+        uint producerBalance = _producer.balance;
+        if (producerBalance == 0) revert InsufficientBuyerCredits();
+        
+        // Calculate the fee and final withdrawal amount
+        uint fee = (producerBalance * platformFeePercentage) / 100;
+        uint amountToWithdraw = producerBalance - fee;
+
+        // Update the producer's balance in the contract
+        producers[msg.sender].balance = 0;
+
+        // Transfer the amount to the producer
+        bool success = IERC20(energyToken).transfer(msg.sender, amountToWithdraw);
+        if (!success) revert WithdrawalFailed();
+
+        emit Withdraw(msg.sender, amountToWithdraw);
+    }
+
+    // Get the current balance of a producer (for displaying on the dashboard)
+    function getBalance(address producer) external view returns (uint) {
+        return producers[producer].balance;
+    }
+
     // Buyers can transfer energy credits to another user
 function transferEnergyCredits(address to, uint creditAmount) external {
 
@@ -170,18 +197,13 @@ function transferEnergyCredits(address to, uint creditAmount) external {
     }
 
     // Allow producers to withdraw their balance
-    function withdraw(uint amount) external onlyProducer {
-
+    function withdraw(uint amount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (amount == 0) revert ZeroValueNotAllowed();
-        
-        Producer storage _producer = producers[msg.sender];
-        if (_producer.tokenBalance < amount) revert InsufficientBalance();
+        if (producers[msg.sender].energyCredits == 0) revert OnlyProducerAllowed();
+        if (balances[msg.sender] < amount) revert InsufficientBalance();
 
-        
-        // add token to producers balance
-        _producer.tokenBalance -= amount;
-
+        balances[msg.sender] -= amount;
         bool success = IERC20(energyToken).transfer(msg.sender, amount);
         if (!success) revert TransferFailed();
 
@@ -189,8 +211,8 @@ function transferEnergyCredits(address to, uint creditAmount) external {
     }
 
     // Get the balance of a producer
-    function getBalance() external view onlyProducer returns (uint) {
-        return producers[msg.sender].tokenBalance;
+    function getBalance(address producer) external view returns (uint) {
+        return balances[producer];
     }
 
     // Get the credit balance of a buyer from a specific producer
@@ -201,15 +223,6 @@ function transferEnergyCredits(address to, uint creditAmount) external {
     // Get the token balance of this contract
     function getContractBalance() external view onlyOwner returns (uint) {
         return IERC20(energyToken).balanceOf(address(this));
-    }
-
-
-    function getAllProducers() external view returns (Producer[] memory) {
-        Producer[] memory allProducers = new Producer[](allProducerAddresses.length);
-        for (uint i = 0; i < allProducerAddresses.length; i++) {
-            allProducers[i] = producers[allProducerAddresses[i]];
-        }
-        return allProducers;
     }
 
 }
