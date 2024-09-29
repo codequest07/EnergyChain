@@ -152,34 +152,4 @@ function updatePricePerUnit(uint _newPrice) external {
     emit EnergyCreditsTransferred(msg.sender, to, creditAmount);
     }
 
-    // Allow producers to withdraw their balance
-    function withdraw(uint amount) external {
-        if (msg.sender == address(0)) revert AddressZeroDetected();
-        if (amount == 0) revert ZeroValueNotAllowed();
-        if (producers[msg.sender].energyCredits == 0) revert OnlyProducerAllowed();
-        if (balances[msg.sender] < amount) revert InsufficientBalance();
-
-        balances[msg.sender] -= amount;
-        bool success = IERC20(energyToken).transfer(msg.sender, amount);
-        if (!success) revert TransferFailed();
-
-        emit ProducerWithdrawal(msg.sender, amount);
-    }
-
-    // Get the balance of a producer
-    function getBalance(address producer) external view returns (uint) {
-        return balances[producer];
-    }
-
-    // Get the credit balance of a buyer from a specific producer
-    function creditBalanceOf(address producer, address buyer) external view returns(uint256) {
-        return buyerCredits[producer][buyer];
-    }
-
-
-    // Get the token balance of this contract
-    function getContractBalance() external view returns (uint) {
-        return IERC20(energyToken).balanceOf(address(this));
-    }
-
 }
