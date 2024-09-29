@@ -130,7 +130,7 @@ contract Energy {
         buyerCredits[producer][to] += creditAmount;
 
         // Log the transfer of energy credits
-        emit EnergyCreditsTransferred(msg.sender, to, producer, creditAmount);
+        emit EnergyCreditsTransferred(msg.sender, to, creditAmount);
     }
 
 }
