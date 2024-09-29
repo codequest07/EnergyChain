@@ -2,9 +2,23 @@
 import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import Link from "next/link";
-import { navItems } from "@/utils/data";
-import { usePathname } from "next/navigation";
+import Link from "next/link";import { Badge } from "./ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Input } from "./ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 const Header = () => {
   const pathname = usePathname();
@@ -52,12 +66,39 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-3">
-          <p className="text-sm text-[#575757] font-[400]">Your location</p>
-          <div className="flex items-center space-x-2">
-            <p className="font-[500]">Awka, Anambra</p>
-          </div>
-        </div>
+    <div className="ml-auto flex items-center space-x-4">
+        <Button variant="outline" size="sm" className="hidden sm:flex">
+          <Wallet className="mr-2 h-4 w-4" />
+          0x1234...5678
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative h-8 w-8 rounded-full">
+              <Bell className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>New energy offer available</DropdownMenuItem>
+            <DropdownMenuItem>Your energy sale was completed</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="md:hidden">
+              <Menu className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>Dashboard</DropdownMenuItem>
+            <DropdownMenuItem>Analytics</DropdownMenuItem>
+            <DropdownMenuItem>Trading</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
