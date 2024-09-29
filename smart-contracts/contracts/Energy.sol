@@ -16,15 +16,10 @@ contract Energy {
     error OnlyOwnerAllowed();
     error OnlyProducerAllowed();
     error InsufficientBalance();
-    error CallerNotProducer();
-    error UpdatedpriceIsSame();
     
 
     address public owner;
     address public energyToken;
-
-    // Array to store all producer addresses
-    address[] private allProducerAddresses;
 
     constructor(address _energyToken) {
         owner = msg.sender;
@@ -45,7 +40,7 @@ contract Energy {
         address producerAddress;
         uint energyCredits;
         uint pricePerUnit;
-        uint tokenBalance;
+    uint balance; 
     }
 
     event ProducerRegistered(address producer, uint energyCredits, uint pricePerUnit);
@@ -56,9 +51,11 @@ contract Energy {
     event EnergyUsageTracked(address buyer, uint usageAmount);
     event ProducerWithdrawal(address producer, uint amount);
 
-
     // Mapping to store registered producers
     mapping(address => Producer) public producers;
+
+    // Mapping to store balances of users
+    mapping(address => uint) public balances;
 
     // Mapping to store balances of users
     mapping(address => uint) public balances;
@@ -83,11 +80,7 @@ contract Energy {
         if (producers[msg.sender].energyCredits != 0) revert ProducerAlreadyRegistered();
         
         // Register the producer with the provided details
-        producers[msg.sender] = Producer(msg.sender, _energyCredits, _pricePerUnit, 0);
-
-        // Add the new producer to the array
-        allProducerAddresses.push(msg.sender);
-        isUserProducer[msg.sender] = true;
+        producers[msg.sender] = Producer(_energyCredits, _pricePerUnit);
         
         // Log the producer registration
         emit ProducerRegistered(msg.sender, _energyCredits, _pricePerUnit);
@@ -148,15 +141,12 @@ contract Energy {
         // Check if the buyer has enough tokens to make the purchase
         if (IERC20(energyToken).balanceOf(msg.sender) < totalCost) revert InsufficientTokenBalance();
         
-        // Transfer the tokens from the buyer to the producer
+    // Transfer the tokens from the buyer to the contract (instead of the producer directly)
         bool success = IERC20(energyToken).transferFrom(msg.sender, address(this), totalCost);
         if (!success) revert TransferFailed();
 
         // Deduct the sold credits from the producer's balance
-        _producer.energyCredits -= creditAmount;
-
-        // add token to producers balance
-        _producer.tokenBalance += totalCost;
+        producers[producer].energyCredits -= creditAmount;
 
         // Add the purchased credits to the buyer's balance
         buyerCredits[producer][msg.sender] += creditAmount;
