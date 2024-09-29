@@ -13,15 +13,12 @@ contract Energy {
     error InsufficientTokenBalance();
     error InsufficientBuyerCredits();
     error TransferFailed();
-error OnlyOwnerAllowed();
-    error OnlyProducerAllowed();
-    error InsufficientBalance();
-    
+error NotAProducer();
+    error WithdrawalFailed();
 
     address public owner;
     address public energyToken;
-    // Array to store all producer addresses
-    address[] private allProducerAddresses;
+uint public platformFeePercentage = 2; 
 
     constructor(address _energyToken) {
         owner = msg.sender;
@@ -37,7 +34,7 @@ error OnlyOwnerAllowed();
         address producerAddress;
         uint energyCredits;
         uint pricePerUnit;
-    uint tokenBalance;
+    uint balance; 
     }
 
     event ProducerRegistered(address producer, uint energyCredits, uint pricePerUnit);
@@ -45,15 +42,11 @@ error OnlyOwnerAllowed();
 event PriceUpdated(address producer, uint pricePerUnit);
     event EnergyCreditsPurchased(address buyer, address producer, uint creditAmount);
 event EnergyCreditsTransferred(address from, address to, uint creditAmount);
-    event EnergyUsageTracked(address buyer, uint usageAmount);
-    event ProducerWithdrawal(address producer, uint amount);
-
+    
+    event Withdraw(address producer, uint amount);
 
     // Mapping to store registered producers
     mapping(address => Producer) public producers;
-    // Mapping to store balances of users
-    mapping(address => uint) public balances;
-
     // Mapping to store energy credits for buyers
     mapping(address => mapping(address => uint)) public buyerCredits; // producer => buyer => credits
 mapping(address => uint) public energyUsage;
@@ -74,11 +67,7 @@ mapping(address => uint) public energyUsage;
         if (producers[msg.sender].energyCredits != 0) revert ProducerAlreadyRegistered();
         
     // Register the producer with the provided details
-        producers[msg.sender] = Producer(msg.sender, _energyCredits, _pricePerUnit, 0);
-
-        // Add the new producer to the array
-        allProducerAddresses.push(msg.sender);
-        isUserProducer[msg.sender] = true;
+        producers[msg.sender] = Producer(_energyCredits, _pricePerUnit, 0);
         
         // Emit the event to log registration
         emit ProducerRegistered(msg.sender, _energyCredits, _pricePerUnit);
@@ -115,7 +104,7 @@ mapping(address => uint) public energyUsage;
 
 // Buyers can purchase energy credits from a specific producer
     // This transfers tokens from the buyer to the contract and credits the producer's balance
-    function purchaseEnergyCredits(address producer, uint creditAmount) external nonReentrant {
+    function purchaseEnergyCredits(address producer, uint creditAmount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (producer == address(0)) revert AddressZeroDetected();
         if (creditAmount == 0) revert ZeroValueNotAllowed();
@@ -146,11 +135,11 @@ mapping(address => uint) public energyUsage;
     }
 
     // Buyers can transfer energy credits to another user
-function transferEnergyCredits(address to, uint creditAmount) external {
+    function transferEnergyCredits(address to, uint creditAmount) external {
 
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (to == address(0)) revert AddressZeroDetected();
-    if (creditAmount == 0) revert ZeroValueNotAllowed();
+        ]if (creditAmount == 0) revert ZeroValueNotAllowed();
         
         // Making sure the sender has enough credits to transfer
         uint senderCredits = buyerCredits[msg.sender][msg.sender];
