@@ -1,17 +1,40 @@
 "use client";
-import { Menu, X, Zap } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
 
-export default function NavBarr() {
+import React, { useState } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Sun,
+  Zap,
+  BarChart2,
+  Shield,
+  Users,
+  Leaf,
+  Menu,
+  X,
+} from "lucide-react";
+import Hero2 from "./Hero2";
+import Features from "./Features";
+import Benefits from "./Benefits";
+import GetStarted from "./Get-started";
+
+export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
   return (
-    <div className="w-full fixed top-0 z-10  bg-white">
-      <header className=" container mx-auto px-4 py-6">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100">
+      <header className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
@@ -22,25 +45,25 @@ export default function NavBarr() {
           <nav className="hidden md:block">
             <ul className="flex space-x-4">
               <li>
-                <Link
-                  href="#"
+                <a
+                  href="#features"
                   className="text-sm lg:text-base text-green-800 hover:text-green-600">
                   Features
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
+                <a
                   href="#benefits"
                   className="text-sm lg:text-base text-green-800 hover:text-green-600">
                   Benefits
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
-                  href="/dashboard"
+                <a
+                  href="#get-started"
                   className="text-sm lg:text-base text-green-800 hover:text-green-600">
                   Get Started
-                </Link>
+                </a>
               </li>
             </ul>
           </nav>
@@ -86,6 +109,51 @@ export default function NavBarr() {
           </nav>
         )}
       </header>
+
+      <main>
+        <Hero2 />
+
+        <Features />
+        <Benefits />
+
+        <GetStarted />
+
+      
+      </main>
+
+      <footer className="bg-green-900 text-white py-8">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+          <div className="mb-4 md:mb-0">
+            <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-green-400 inline-block mr-2" />
+            <span className="text-xl sm:text-2xl font-bold">EnergyChain</span>
+          </div>
+          <nav>
+            <ul className="flex flex-wrap justify-center md:justify-end space-x-4">
+              <li>
+                <a
+                  href="#"
+                  className="text-sm sm:text-base hover:text-green-400">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-sm sm:text-base hover:text-green-400">
+                  Terms of Service
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-sm sm:text-base hover:text-green-400">
+                  Contact Us
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </footer>
     </div>
   );
 }
