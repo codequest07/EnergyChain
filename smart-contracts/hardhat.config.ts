@@ -5,7 +5,7 @@ solidity: "0.8.24",
   networks: {
     // for testnet
     "scroll-sepolia": {
-      url: process.env.SCROLL_RPC_URL!,
+      url: process.env.ALCHEMY_SCROLL_RPC_URL!,
       accounts: [process.env.ACCOUNT_PRIVATE_KEY!],
       gasPrice: 1000000000,
     },
