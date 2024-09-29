@@ -1,3 +1,4 @@
+"use client";
 import {
   Bell,
   Home,
@@ -30,6 +31,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import CustomConnectButton from "./CustomConnectButton";
 
 const Header = () => {
   return (
@@ -115,10 +117,7 @@ const Header = () => {
       </div>
 
       <div className="ml-auto flex items-center space-x-4">
-        <Button variant="outline" size="sm" className="hidden sm:flex">
-          <Wallet className="mr-2 h-4 w-4" />
-          0x1234...5678
-        </Button>
+        <CustomConnectButton />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button

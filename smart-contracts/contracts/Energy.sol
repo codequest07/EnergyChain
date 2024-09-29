@@ -35,18 +35,25 @@ contract Energy {
     event PriceUpdated(address producer, uint pricePerUnit);
     event EnergyCreditsPurchased(address buyer, address producer, uint creditAmount);
     event EnergyCreditsTransferred(address from, address to, uint creditAmount);
+
     
     event Withdraw(address producer, uint amount);
+
 
     // Mapping to store registered producers
     mapping(address => Producer) public producers;
 
     // Mapping to store energy credits for buyers
     mapping(address => mapping(address => uint)) public buyerCredits; // producer => buyer => credits
+    mapping(address => uint) public energyUsage;
+
+// Producers can register their available energy credits and the price per unit
+
 
     mapping(address => uint) public energyUsage;
 
     // Producers can register their available energy credits and the price per unit
+
 
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
@@ -151,6 +158,7 @@ contract Energy {
     }
 
     // Buyers can transfer energy credits to another user
+
 
     function transferEnergyCredits(address to, uint creditAmount) external {
 
