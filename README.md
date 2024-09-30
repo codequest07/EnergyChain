@@ -9,6 +9,8 @@ Our inspiration stems from the pressing issue of insufficient power supply in Af
 
 Our inspiration stems from the pressing issue of insufficient power supply in Africa. Energy access remains a major challenge across the continent, and this platform was conceived to address that gap. By decentralizing power supply, we aim to empower renewable energy producers and power plant operators to safely and efficiently extend energy access to those in need. Our goal is to create a more sustainable, reliable, and equitable energy system that benefits both producers and consumers, contributing to the continent's growth and development.
 
+Check out our pitch deck here: https://drive.google.com/file/d/1DEHKmNRdKCEFtiYoxM8zxI__cjb_IBHK/view?usp=sharing
+
 
 ## Project Overview
 
@@ -16,7 +18,8 @@ The **Decentralized Energy Marketplace** aims to revolutionize energy trading by
 
 Deployed Smart contract on Scroll Sepolia Testnet: https://sepolia.scrollscan.com/address/0xA1103E6490ab174036392EbF5c798C9DaBAb24EE
 
-Live Link to interact: live-link.on.vercel
+Live Link to interact: https://energyy-chain.vercel.app/
+
 
 ### Objectives
 
