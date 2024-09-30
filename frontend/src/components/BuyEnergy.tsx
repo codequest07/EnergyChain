@@ -8,8 +8,7 @@ import {
 } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Activity, DollarSign, Download, Zap, ArrowUpDown } from "lucide-react";
+import {  Download,  } from "lucide-react";
 
 const BuyEnergy = () => {
   return (

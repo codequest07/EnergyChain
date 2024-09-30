@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import MemoLock from "@/icons/Lock";
 import MemoLove from "@/icons/Love";
 import MemoSparkle from "@/icons/Sparkle";
