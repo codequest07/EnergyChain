@@ -17,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "energyy-chain",
-  description: "energyy-chain",
+  title: "energy-chain",
+  description: "energy-chain",
 };
 
 export default function RootLayout({
