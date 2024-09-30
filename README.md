@@ -17,6 +17,7 @@ Check out our pitch deck here: https://drive.google.com/file/d/1DEHKmNRdKCEFtiYo
 The **Decentralized Energy Marketplace** aims to revolutionize energy trading by creating a transparent, efficient, and user-friendly platform for energy producers and consumers. This innovative project will leverage blockchain technology to establish a single smart contract where energy producers can list their available energy credits, allowing for seamless and transparent transactions. The platform is built on the **SCROLL network**, leveraging its scalability and efficiency for energy transactions provided by the **ALCHEMY RPC-URL**
 
 Deployed Smart contract on Scroll Sepolia Testnet: https://sepolia.scrollscan.com/address/0xA1103E6490ab174036392EbF5c798C9DaBAb24EE
+https://sepolia.scrollscan.com/address/0x2C0457F82B57148e8363b4589bb3294b23AE7625#code
 
 Live Link to interact: https://energyy-chain.vercel.app/
 
