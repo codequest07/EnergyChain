@@ -13,13 +13,13 @@ contract Energy {
     error InsufficientTokenBalance();
     error InsufficientBuyerCredits();
     error TransferFailed();
-error NotAProducer();
-    error WithdrawalFailed();
+error OnlyOwnerAllowed();
+    error OnlyProducerAllowed();
+    error InsufficientBalance();
+    
 
     address public owner;
     address public energyToken;
-uint public platformFeePercentage = 2; 
-
     constructor(address _energyToken) {
         owner = msg.sender;
         energyToken = _energyToken;
@@ -30,12 +30,16 @@ uint public platformFeePercentage = 2;
         _;
     }
 
+    modifier onlyProducer {
+        require(isUserProducer[msg.sender], "Caller is not a producer");
+        _;
+    }
+
     struct Producer {
         address producerAddress;
         uint energyCredits;
         uint pricePerUnit;
-    uint balance; 
-    }
+}
 
     event ProducerRegistered(address producer, uint energyCredits, uint pricePerUnit);
     event UnitsUpdated(address producer, uint energyCredits);
@@ -66,6 +70,8 @@ mapping(address => uint) public energyUsage;
 
     mapping(address => uint) public energyUsage;
 
+    mapping (address => bool) public isUserProducer;
+
     // Producers can register their available energy credits and the price per unit
 >>>>>>> 78a73a966b99d140c48d4c4ebc6cfbb8eab1b61f
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
@@ -76,7 +82,7 @@ mapping(address => uint) public energyUsage;
         if (producers[msg.sender].energyCredits != 0) revert ProducerAlreadyRegistered();
         
     // Register the producer with the provided details
-        producers[msg.sender] = Producer(_energyCredits, _pricePerUnit, 0);
+        producers[msg.sender] = Producer(_energyCredits, _pricePerUnit);
         
         // Emit the event to log registration
         emit ProducerRegistered(msg.sender, _energyCredits, _pricePerUnit);
@@ -134,12 +140,15 @@ mapping(address => uint) public energyUsage;
         // Check if the buyer has enough tokens to make the purchase
         if (IERC20(energyToken).balanceOf(msg.sender) < totalCost) revert InsufficientTokenBalance();
         
-    // Transfer the tokens from the buyer to the contract (instead of the producer directly)
-        bool success = IERC20(energyToken).transferFrom(msg.sender, address(this), totalCost);
+    // Transfer the tokens from the buyer to the producer
+        bool success = IERC20(energyToken).transferFrom(msg.sender, producer, totalCost);
         if (!success) revert TransferFailed();
 
         // Deduct the sold credits from the producer's balance
-        producers[producer].energyCredits -= creditAmount;
+        _producer.energyCredits -= creditAmount;
+
+        // add token to producers balance
+        _producer.tokenBalance += totalCost;
 
         // Add the purchased credits to the buyer's balance
         buyerCredits[producer][msg.sender] += creditAmount;
@@ -200,11 +209,44 @@ mapping(address => uint) public energyUsage;
         buyerCredits[producer][to] += creditAmount;
 
     // Log the transfer of energy credits
-        emit EnergyCreditsTransferred(msg.sender, to, producer, creditAmount);
+        emit EnergyCreditsTransferred(msg.sender, to, creditAmount);
     }
-// Get the token balance of this contract
-    function getContractBalance() external view returns (uint) {
+
+    // Allow producers to withdraw their balance
+    function withdraw(uint amount) external {
+        if (msg.sender == address(0)) revert AddressZeroDetected();
+        if (amount == 0) revert ZeroValueNotAllowed();
+        if (producers[msg.sender].energyCredits == 0) revert OnlyProducerAllowed();
+        if (balances[msg.sender] < amount) revert InsufficientBalance();
+
+        balances[msg.sender] -= amount;
+        bool success = IERC20(energyToken).transfer(msg.sender, amount);
+        if (!success) revert TransferFailed();
+
+        emit ProducerWithdrawal(msg.sender, amount);
+    }
+// Get the balance of a producer
+    function getBalance(address producer) external view returns (uint) {
+        return balances[producer];
+    }
+
+    // Get the credit balance of a buyer from a specific producer
+    function creditBalanceOf(address producer, address buyer) external view returns(uint256) {
+        return buyerCredits[producer][buyer];
+    }
+
+    // Get the token balance of this contract
+    function getContractBalance() external view onlyOwner returns (uint) {
         return IERC20(energyToken).balanceOf(address(this));
+    }
+
+
+    function getAllProducers() external view returns (Producer[] memory) {
+        Producer[] memory allProducers = new Producer[](allProducerAddresses.length);
+        for (uint i = 0; i < allProducerAddresses.length; i++) {
+            allProducers[i] = producers[allProducerAddresses[i]];
+        }
+        return allProducers;
     }
 
 }
