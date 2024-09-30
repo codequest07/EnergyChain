@@ -4,7 +4,7 @@ const config: HardhatUserConfig = {
 solidity: "0.8.24",
   networks: {
     // for testnet
-    "scrollSepolia": {
+    "scroll-sepolia": {
       url: process.env.ALCHEMY_SCROLL_RPC_URL!,
       accounts: [process.env.ACCOUNT_PRIVATE_KEY!],
       gasPrice: 1000000000,
