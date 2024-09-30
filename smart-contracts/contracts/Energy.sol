@@ -4,8 +4,7 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract Energy {
-
+contract Energy is ReentrancyGuard {
     error AddressZeroDetected();
     error ZeroValueNotAllowed();
     error ProducerAlreadyRegistered();
@@ -21,12 +20,13 @@ contract Energy {
     address public owner;
     address public energyToken;
 
+
     constructor(address _energyToken) {
         owner = msg.sender;
         energyToken = _energyToken;
     }
 
-    modifier onlyOwner {
+    modifier onlyOwner() {
         require(msg.sender == owner, "Only owner can call this function");
         _;
     }
@@ -36,14 +36,21 @@ contract Energy {
         uint pricePerUnit;
     }
 
-    event ProducerRegistered(address producer, uint energyCredits, uint pricePerUnit);
+    event ProducerRegistered(
+        address producer,
+        uint energyCredits,
+        uint pricePerUnit
+    );
     event UnitsUpdated(address producer, uint energyCredits);
     event PriceUpdated(address producer, uint pricePerUnit);
-    event EnergyCreditsPurchased(address buyer, address producer, uint creditAmount);
+    event EnergyCreditsPurchased(
+        address buyer,
+        address producer,
+        uint creditAmount
+    );
     event EnergyCreditsTransferred(address from, address to, uint creditAmount);
     event EnergyUsageTracked(address buyer, uint usageAmount);
     event ProducerWithdrawal(address producer, uint amount);
-
 
     // Mapping to store registered producers
     mapping(address => Producer) public producers;
@@ -54,15 +61,19 @@ contract Energy {
     // Mapping to store energy credits for buyers
     mapping(address => mapping(address => uint)) public buyerCredits; // producer => buyer => credits
     mapping(address => uint) public energyUsage;
+    mapping(address => uint) balances;
 
     // Producers can register their available energy credits and the price per unit
+
     function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
-        if (_energyCredits == 0 || _pricePerUnit == 0) revert ZeroValueNotAllowed();
+        if (_energyCredits == 0 || _pricePerUnit == 0)
+            revert ZeroValueNotAllowed();
 
         // Check if this producer is already in the system
-        if (producers[msg.sender].energyCredits != 0) revert ProducerAlreadyRegistered();
-        
+        if (producers[msg.sender].energyCredits != 0)
+            revert ProducerAlreadyRegistered();
+
         // Register the producer with the provided details
         producers[msg.sender] = Producer(_energyCredits, _pricePerUnit);
         
@@ -95,20 +106,22 @@ contract Energy {
     }
 
     // Buyers can purchase energy credits from a specific producer
+
     // This transfers tokens from the buyer to the producer and updates both parties' credit balances
     function purchaseEnergyCredits(address producer, uint creditAmount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (producer == address(0)) revert AddressZeroDetected();
         if (creditAmount == 0) revert ZeroValueNotAllowed();
-        
+
         Producer memory _producer = producers[producer];
-        
+
         // Make sure the producer has enough energy credits to sell
-        if (_producer.energyCredits < creditAmount) revert NotEnoughEnergyCredits();
-        
+        if (_producer.energyCredits < creditAmount)
+            revert NotEnoughEnergyCredits();
+
         // Calculate how much the buyer needs to pay in tokens
         uint totalCost = creditAmount * _producer.pricePerUnit;
-        
+
         // Check if the buyer has enough tokens to make the purchase
         if (IERC20(energyToken).balanceOf(msg.sender) < totalCost) revert InsufficientTokenBalance();
         
@@ -125,6 +138,7 @@ contract Energy {
         // Log the purchase of energy credits
         emit EnergyCreditsPurchased(msg.sender, producer, creditAmount);
     }
+
 
     // Buyers can transfer energy credits to another user
     // This moves energy credits from the sender’s balance to the recipient’s balance
@@ -151,7 +165,8 @@ contract Energy {
     function withdraw(uint amount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (amount == 0) revert ZeroValueNotAllowed();
-        if (producers[msg.sender].energyCredits == 0) revert OnlyProducerAllowed();
+        if (producers[msg.sender].energyCredits == 0)
+            revert OnlyProducerAllowed();
         if (balances[msg.sender] < amount) revert InsufficientBalance();
 
         balances[msg.sender] -= amount;
@@ -167,7 +182,10 @@ contract Energy {
     }
 
     // Get the credit balance of a buyer from a specific producer
-    function creditBalanceOf(address producer, address buyer) external view returns(uint256) {
+    function creditBalanceOf(
+        address producer,
+        address buyer
+    ) external view returns (uint256) {
         return buyerCredits[producer][buyer];
     }
 
@@ -175,5 +193,4 @@ contract Energy {
     function getContractBalance() external view onlyOwner returns (uint) {
         return IERC20(energyToken).balanceOf(address(this));
     }
-
 }
