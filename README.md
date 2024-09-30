@@ -2,9 +2,14 @@
 
 ## Project Overview
 
+## What we aim to solve!
+
+Our inspiration stems from the pressing issue of insufficient power supply in Africa. Energy access remains a major challenge across the continent, and this platform was conceived to address that gap. By decentralizing power supply, we aim to empower renewable energy producers and power plant operators to safely and efficiently extend energy access to those in need. Our goal is to create a more sustainable, reliable, and equitable energy system that benefits both producers and consumers, contributing to the continent's growth and development.
+
+
 The **Decentralized Energy Marketplace** aims to revolutionize energy trading by creating a transparent, efficient, and user-friendly platform for energy producers and consumers. This innovative project will leverage blockchain technology to establish a single smart contract where energy producers can list their available energy credits, allowing for seamless and transparent transactions. The platform is built on the **SCROLL network**, leveraging its scalability and efficiency for energy transactions provided by the **ALCHEMY RPC-URL**
 
-Deployed Smart contract on Scroll Sepolia Testnet: .....deployed link
+Deployed Smart contract on Scroll Sepolia Testnet: https://sepolia.scrollscan.com/address/0xA1103E6490ab174036392EbF5c798C9DaBAb24EE
 
 Live Link to interact: live-link.on.vercel
 
