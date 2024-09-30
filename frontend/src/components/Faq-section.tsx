@@ -7,24 +7,24 @@ import {
 
 const faqItems = [
   {
-    question: "How does DenLink ensure the security of transactions?",
+    question: "How does EnergyChain ensure the security of transactions?",
     answer:
-      "DenLink uses advanced blockchain technology to secure all transactions. This ensures transparency, immutability, and protection against fraud. Each transaction is encrypted and verified across multiple nodes in the network.",
+      "EnergyChain uses advanced blockchain technology to secure all transactions. This ensures transparency, immutability, and protection against fraud. Each transaction is encrypted and verified across multiple nodes in the network.",
   },
   {
     question: "Can I list my energy anytime?",
     answer:
-      "Yes, DenLink allows you to list your surplus energy whenever you want. Simply log into your dashboard, enter your available energy, and your listing will be live instantly.",
+      "Yes, EnergyChain allows you to list your surplus energy whenever you want. Simply log into your dashboard, enter your available energy, and your listing will be live instantly.",
   },
   {
     question: "What cryptocurrencies can I use for transactions?",
     answer:
-      "DenLink supports various major cryptocurrencies, including Bitcoin, Ethereum, and others. You can choose the currency that suits you best when listing your energy or making a purchase.",
+      "EnergyChain supports various major cryptocurrencies, including Bitcoin, Ethereum, and others. You can choose the currency that suits you best when listing your energy or making a purchase.",
   },
   {
     question: "Is there a limit on how much energy I can sell?",
     answer:
-      "There is no cap on the amount of energy you can sell through DenLink. You can list as much surplus energy as you have available, allowing you to maximize your earnings.",
+      "There is no cap on the amount of energy you can sell through EnergyChain. You can list as much surplus energy as you have available, allowing you to maximize your earnings.",
   },
   {
     question: "How do I track my energy sales?",
@@ -34,7 +34,7 @@ const faqItems = [
   {
     question: "What happens if a transaction fails?",
     answer:
-      "In the rare event of a transaction failure, DenLink's blockchain technology ensures that your funds remain secure. You will be notified, and the system will automatically refund any transactions that do not complete as expected.",
+      "In the rare event of a transaction failure, EnergyChain's blockchain technology ensures that your funds remain secure. You will be notified, and the system will automatically refund any transactions that do not complete as expected.",
   },
 ];
 

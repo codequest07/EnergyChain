@@ -13,28 +13,28 @@ const testimonials = [
     role: "Solar Panel Owner",
     avatar: MemoMicheal,
     content:
-      "DenLink has completely transformed how I share my unused solar energy. The process is seamless, and I've started earning rewards effortlessly. It's great to know my excess energy is going to good use!",
+      "EnergyChain has completely transformed how I share my unused solar energy. The process is seamless, and I've started earning rewards effortlessly. It's great to know my excess energy is going to good use!",
   },
   {
     name: "Sarah Johnson",
     role: "Clean Energy Advocate",
     avatar: MemoSarah,
     content:
-      "Purchasing energy through DenLink is a breeze! I love the competitive prices and the fact that I'm supporting local solar panel owners. It's a win-win for everyone involved.",
+      "Purchasing energy through EnergyChain is a breeze! I love the competitive prices and the fact that I'm supporting local solar panel owners. It's a win-win for everyone involved.",
   },
   {
     name: "David Chen",
     role: "Eco-Friendly Consumer",
     avatar: MemoDavid,
     content:
-      "The user-friendly interface of DenLink made it easy for me to find and buy clean energy. The transparency in transactions gives me confidence in my purchases. Highly recommend!",
+      "The user-friendly interface of EnergyChain made it easy for me to find and buy clean energy. The transparency in transactions gives me confidence in my purchases. Highly recommend!",
   },
   {
     name: "Emily Davis",
     role: "Renewable Energy Enthusiast",
     avatar: MemoEmily,
     content:
-      "DenLink is not just a marketplace, it's a community. I appreciate how it allows us to collaborate for a greener future while making sustainable choices easier.",
+      "EnergyChain is not just a marketplace, it's a community. I appreciate how it allows us to collaborate for a greener future while making sustainable choices easier.",
   },
 ];
 

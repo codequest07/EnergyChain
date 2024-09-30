@@ -22,7 +22,7 @@ export default function CTASection() {
             Join the Solar Energy Revolution Today!
           </h2>
           <p className="text-gray-600 text-lg">
-            Experience the future of renewable energy with DenLink, where solar
+            Experience the future of renewable energy with EnergyChain, where solar
             panel owners can effortlessly share their surplus energy with
             consumers seeking clean power.
           </p>
