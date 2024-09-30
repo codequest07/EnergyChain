@@ -11,6 +11,8 @@ Our inspiration stems from the pressing issue of insufficient power supply in Af
 
 Check out our pitch deck here: https://drive.google.com/file/d/1DEHKmNRdKCEFtiYoxM8zxI__cjb_IBHK/view?usp=sharing
 
+check out our live demo vide here: https://drive.google.com/file/d/1DEHKmNRdKCEFtiYoxM8zxI__cjb_IBHK/view?usp=sharing
+
 
 ## Project Overview
 
