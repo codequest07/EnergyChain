@@ -12,7 +12,7 @@ solidity: "0.8.24",
   },
   etherscan: {
     apiKey: {
-      "scrollSepolia": [process.env.SCROLLSCAN_API_KEY],
+      "scrollSepolia": process.env.SCROLLSCAN_API_KEY || "",
     },
     customChains: [
       {
