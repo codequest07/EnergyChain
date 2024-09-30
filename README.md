@@ -1,4 +1,4 @@
-# Energy Chain: Decentralized Energy Marketplace DApp on Scroll Sepolia
+# Icarus: Decentralized Energy Marketplace DApp on Scroll Sepolia
 
 ## Project Overview
 
@@ -93,56 +93,10 @@ npm install
 ```
 
 ### Frontend Setup (frontend directory)
-
-1. Navigate to the `frontend` directory:
-   ```
-   cd frontend
-   ```
-
-2. Install dependencies:
-   ```
-   npm install
-   ```
-
-3. Create a `.env.local` file in the `frontend` directory with the following content:
-   ```
-   NEXT_PUBLIC_ALCHEMY_ID=<Your Alchemy API Key>
-   ```
-
-4. Run the development server:
-   ```
-   npm run dev
-   ```
-
-5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
-
+For detailed instructions on setting up the frontend, please refer to the [Client README](./frontend/README.md).
 
 ### Smart Contract Setup (smart-contracts directory)
-
-1. Navigate to the `smart-contracts` directory:
-   ```
-   cd smart-contracts
-   ```
-
-2. Install dependencies:
-   ```
-   npm install
-   ```
-
-3. Create a `.env` file in the `smart-contracts` directory with the following content:
-   ```
-   SCROLL_RPC_URL=<Your Alchemy Scroll Testnet RPC URL>
-   ACCOUNT_PRIVATE_KEY=<Your Ethereum account private key>
-   ```
-
-4. Compile the smart contracts:
-   ```
-   npx hardhat compile
-   ```
-
-## Deployment
-
-The smart contracts are deployed to the Scroll Testnet using Alchemy's RPC URLs and API. Make sure to update the `hardhat.config.ts` file with the correct network configurations before deployment.
+For detailed instructions on setting up and deploying the smart contracts, please refer to the [Hardhat Contracts README](./smart-contracts/README.md).
 
 ## Environment Variables
 
