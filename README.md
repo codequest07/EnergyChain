@@ -74,6 +74,7 @@ The project is divided into two main directories:
 │ └── tailwind.config.ts
 ├── smart-contracts/
 │ ├── contracts/
+│ │ └── Energy.sol
 │ │ └── ICAR.sol
 │ ├── hardhat.config.ts
 │ └── package.json
