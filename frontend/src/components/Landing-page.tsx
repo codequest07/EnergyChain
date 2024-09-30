@@ -1,22 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
+
+
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Sun,
   Zap,
-  BarChart2,
-  Shield,
-  Users,
-  Leaf,
   Menu,
   X,
 } from "lucide-react";

@@ -27,6 +27,8 @@ import {
 } from "recharts";
 import { Zap, Battery, TrendingUp } from "lucide-react";
 import { useState } from "react";
+/* eslint-disable react/no-unescaped-entities */
+
 
 // Mock data for demonstration
 const energyData = [

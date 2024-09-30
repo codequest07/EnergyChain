@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
+/* eslint-disable react/no-unescaped-entities */
+
 
 const LearnMore = () => {
   return (
