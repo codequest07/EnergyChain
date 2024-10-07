@@ -1,8 +1,8 @@
 "use client";
 import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import Link from "next/link";import { Badge } from "./ui/badge";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";import Link from "next/link";
+import { Badge } from "./ui/badge";
 import {
   Card,
   CardContent,
@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import CustomConnectButton from "./CustomConnectButton";
 
 const Header = () => {
   const pathname = usePathname();
@@ -56,21 +57,20 @@ const Header = () => {
           </nav>
         </SheetContent>
       </Sheet>
-
-      <div className="sm:container sm:mx-auto flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
-        <div className="flex items-center space-x-4">
-          <h1 className="font-[500] text-xl text-[#21250F]">Dashboard</h1>
-          <div className="bg-[#FFF1F3] text-[#C01048] hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-[500]">
-            <p className="bg-[#F63D68] h-2 w-2 rounded-full" />{" "}
-            <p>You have 3.5KWH surplus</p>
+    <div className="w-full flex-1">
+        <form>
+          <div className="relative">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search products..."
+              className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
+            />
           </div>
         </div>
 
     <div className="ml-auto flex items-center space-x-4">
-        <Button variant="outline" size="sm" className="hidden sm:flex">
-          <Wallet className="mr-2 h-4 w-4" />
-          0x1234...5678
-        </Button>
+        <CustomConnectButton />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
