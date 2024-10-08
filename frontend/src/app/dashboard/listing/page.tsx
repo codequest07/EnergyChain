@@ -4,7 +4,7 @@ import EnergyMonitoring from "@/components/Energy-monitoring";
 const page = () => {
   return (
     <DashboardLayout>
-      <EnergyMonitoring />
+      <h1>My listing</h1>
     </DashboardLayout>
   );
 };

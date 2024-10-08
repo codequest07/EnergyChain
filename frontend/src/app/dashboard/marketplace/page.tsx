@@ -1,10 +1,10 @@
 import { DashboardLayout } from "@/components/Dashboard";
-import EnergyMarketplace from "@/components/Energy-marketplace";
+import EnergyOfferCards from "@/components/Energy-Marketplace/Energy-offer-cards";
 
 const Marketplace = () => {
   return (
     <DashboardLayout>
-      <EnergyMarketplace />
+      <EnergyOfferCards />
     </DashboardLayout>
   );
 };
