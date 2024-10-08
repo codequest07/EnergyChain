@@ -1,10 +1,10 @@
 import { DashboardLayout } from "@/components/Dashboard";
-import EnergyMonitoring from "@/components/Energy-monitoring";
+import ListingOfferCards from "@/components/Listings/Listing-offer-cards";
 
 const page = () => {
   return (
     <DashboardLayout>
-      <h1>My listing</h1>
+      <ListingOfferCards />
     </DashboardLayout>
   );
 };

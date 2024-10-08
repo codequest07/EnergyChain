@@ -3,14 +3,15 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { energyData, sellData } from "@/utils/data";
+import { BuyAds, energyData, sellData } from "@/utils/data";
 
-import EnergyCard from "./EnergyCard";
-import SellEnergyCard from "./SellEnergyCard";
-import MemoFilters from "@/icons/Filters";
+import BuyEnergyAds from "./BuyEnergyAds";
+import SellEnergyAds from "./SellEnergyAds";
+import { DrawerDemo } from "./Details";
 
-export default function EnergyOfferCards() {
+export default function ListingOfferCards() {
   const [activeTab, setActiveTab] = useState("buy");
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   return (
     <div className="container mx-auto p-4">
@@ -23,19 +24,15 @@ export default function EnergyOfferCards() {
           <main className="sm:flex items-center justify-between">
             <TabsList className="flex w-[200px] space-x-4">
               <TabsTrigger value="buy" className="flex-1 text-center">
-                Buy energy
+                Buy ads
               </TabsTrigger>
               <TabsTrigger value="sell" className="flex-1 text-center">
-                Sell energy
+                Sell ads
               </TabsTrigger>
             </TabsList>
 
             {/* Button container with Flexbox */}
             <div className="flex space-x-4 sm:justify-end">
-              <Button variant="outline" className="flex space-x-2">
-                <MemoFilters className="w-4 h-4" />
-                <p> More filters</p>
-              </Button>
               <Button className="bg-[#373D20] text-white hover:bg-[#373D20]">
                 Create a {activeTab === "buy" ? "buy" : "sell"} ad
               </Button>
@@ -43,16 +40,15 @@ export default function EnergyOfferCards() {
           </main>
           <TabsContent value="buy">
             <div className="grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {energyData.map((energy, index) => (
-                <EnergyCard
+              {BuyAds.map((energy, index) => (
+                <BuyEnergyAds
                   key={index}
                   id={energy.id}
                   savings={energy.savings}
-                  rating={energy.rating}
                   price={energy.price}
-                  distance={energy.distance}
-                  quantity={energy.quantity}
-                  limit={energy.limit}
+                  expires={energy.expires}
+                  bought={energy.bought}
+                  onViewDetails={() => setIsDrawerOpen(true)}
                 />
               ))}
             </div>
@@ -60,7 +56,7 @@ export default function EnergyOfferCards() {
           <TabsContent value="sell">
             <div className="grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {sellData.map((energy, index) => (
-                <SellEnergyCard
+                <SellEnergyAds
                   key={index}
                   id={energy.id}
                   savings={energy.savings}
@@ -80,6 +76,7 @@ export default function EnergyOfferCards() {
           </TabsContent>
         </Tabs>
       </div>
+      <DrawerDemo isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
     </div>
   );
 }
