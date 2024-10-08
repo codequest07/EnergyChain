@@ -1,33 +1,19 @@
-"use client";
+'use client';
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider } from 'wagmi';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 
-import { config } from "@/utils/config";
-// import { getConfig } from "@/utils/config";
-import { OnchainKitProvider } from "@coinbase/onchainkit";
-import { base, baseSepolia } from "viem/chains";
-import { type ReactNode, useState } from "react";
-import { type State, WagmiProvider } from "wagmi";
+import { config } from '@/utils/config';
 
-type Props = {
-  children: ReactNode;
-  initialState: State | undefined;
-};
+const queryClient = new QueryClient();
 
-export function Providers({ children, initialState }: Props) {
-  // const [config] = useState(() => getConfig());
-  const [queryClient] = useState(() => new QueryClient());
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <WagmiProvider config={config} initialState={initialState}>
+    <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
-          {/* <OnchainKitProvider
-            apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
-            chain={baseSepolia}
-          > */}
-          {children}
-          {/* </OnchainKitProvider> */}
+            {children}
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
