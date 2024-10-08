@@ -10,10 +10,10 @@ import TestimonialsSection from "@/components/Testimonials";
 
 const page = () => {
   return (
-  <div>
+    <div>
       <NavBar />
-      <div className="mt-7">
-        <Hero />
+      <div className="mt-12">
+        <Hero2 />
         <SocialProofSection />
         <CTASection />
         <SolarEnergy />

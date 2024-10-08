@@ -5,15 +5,9 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import Link from "next/link";
 import { navItems } from "@/utils/data";
 import { usePathname } from "next/navigation";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import Image from "next/image";
-import { icon_metamask_wallet, icon_trust_wallet, icon_wallet } from "@/icons";
-import { useAccount } from "wagmi";
-import { Basenames } from "./basename";
 
 const Header = () => {
   const pathname = usePathname();
-  const { isConnected, address } = useAccount();
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-[#FBFBFB] px-4 lg:h-[80px] lg:px-6">
       <Sheet>
@@ -33,8 +27,7 @@ const Header = () => {
                   pathname === item.href
                     ? "bg-[#EFF1ED] text-[#766153]" // Active state styling
                     : "text-[#575757] hover:bg-[#EFF1ED]" // Default state styling
-                }`}
-              >
+                }`}>
                 {/* Apply conditional color to the icon */}
                 <item.icon
                   className={`h-5 w-5 ${
@@ -49,18 +42,13 @@ const Header = () => {
           </nav>
         </SheetContent>
       </Sheet>
+
       <div className="sm:container sm:mx-auto flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
-        <div className="flex items-center space-x-8">
-          <div>
-            <p className="text-sm text-[#575757] font-[400]">Your location</p>
-            <div className="flex items-center space-x-2">
-              <MemoGps className="h-5 w-5 text-[#373D20]" />
-              <p className="font-[500]">Awka, Anambra</p>
-            </div>
-          </div>
+        <div className="flex items-center space-x-4">
+          <h1 className="font-[500] text-xl text-[#21250F]">Dashboard</h1>
           <div className="bg-[#FFF1F3] text-[#C01048] hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-[500]">
             <p className="bg-[#F63D68] h-2 w-2 rounded-full" />{" "}
-            <p>You have 3.5KWH energy in surplus</p>
+            <p>You have 3.5KWH surplus</p>
           </div>
         </div>
 
@@ -69,22 +57,6 @@ const Header = () => {
           <div className="flex items-center space-x-2">
             <p className="font-[500]">Awka, Anambra</p>
           </div>
-          {/* <ConnectButton />
-          {isConnected ? (
-            <Basenames address={address} />
-          ) : (
-            <Button
-              variant={"outline"}
-              className="flex items-center font-medium p-4 gap-4"
-            >
-              <span className="text-[16px]">Connect your wallet</span>
-              <span className="flex items-center gap-2">
-                <Image src={icon_wallet} alt="wallet icon" />
-                <Image src={icon_trust_wallet} alt="trust wallet icon" />
-                <Image src={icon_metamask_wallet} alt="metamask wallet icon" />
-              </span>
-            </Button>
-          )} */}
         </div>
       </div>
     </header>
