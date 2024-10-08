@@ -1,28 +1,19 @@
 "use client";
 import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";import Link from "next/link";
-import { Badge } from "./ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { Input } from "./ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import CustomConnectButton from "./CustomConnectButton";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import Link from "next/link";
+import { navItems } from "@/utils/data";
+import { usePathname } from "next/navigation";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Image from "next/image";
+import { icon_metamask_wallet, icon_trust_wallet, icon_wallet } from "@/icons";
+import { useAccount } from "wagmi";
+import { Basenames } from "./basename";
 
 const Header = () => {
   const pathname = usePathname();
+  const { isConnected, address } = useAccount();
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-[#FBFBFB] px-4 lg:h-[80px] lg:px-6">
       <Sheet>
@@ -42,7 +33,8 @@ const Header = () => {
                   pathname === item.href
                     ? "bg-[#EFF1ED] text-[#766153]" // Active state styling
                     : "text-[#575757] hover:bg-[#EFF1ED]" // Default state styling
-                }`}>
+                }`}
+              >
                 {/* Apply conditional color to the icon */}
                 <item.icon
                   className={`h-5 w-5 ${
@@ -72,15 +64,27 @@ const Header = () => {
           </div>
         </div>
 
-      <div className="hidden sm:flex space-x-2">
-          <Button
-            variant="outline"
-            className="bg-[#EFF1ED] text-[#766153] hover:bg-[#373D20] hover:text-[#FFFFFF] transition-colors duration-300 ease-in-out">
-            Buy energy
-          </Button>
-          <Button className="bg-[#373D20] text-[#FFFFFF] hover:bg-[#EFF1ED] hover:text-[#766153] transition-colors duration-300 ease-in-out">
-            Sell energy
-          </Button>
+        <div className="flex items-center space-x-3">
+          <p className="text-sm text-[#575757] font-[400]">Your location</p>
+          <div className="flex items-center space-x-2">
+            <p className="font-[500]">Awka, Anambra</p>
+          </div>
+          {/* <ConnectButton />
+          {isConnected ? (
+            <Basenames address={address} />
+          ) : (
+            <Button
+              variant={"outline"}
+              className="flex items-center font-medium p-4 gap-4"
+            >
+              <span className="text-[16px]">Connect your wallet</span>
+              <span className="flex items-center gap-2">
+                <Image src={icon_wallet} alt="wallet icon" />
+                <Image src={icon_trust_wallet} alt="trust wallet icon" />
+                <Image src={icon_metamask_wallet} alt="metamask wallet icon" />
+              </span>
+            </Button>
+          )} */}
         </div>
       </div>
     </header>

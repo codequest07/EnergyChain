@@ -10,33 +10,30 @@
 //   ssr: true, // If your dApp uses server side rendering (SSR)
 // });
 
+import { http, cookieStorage, createConfig, createStorage } from "wagmi";
+import { baseSepolia } from "wagmi/chains";
+import { coinbaseWallet, injected } from "wagmi/connectors";
 
-import { http, cookieStorage, createConfig, createStorage } from 'wagmi';
-import { baseSepolia } from 'wagmi/chains';
-import { coinbaseWallet, injected } from 'wagmi/connectors';
-
-export function getConfig() {
-  return createConfig({
-    chains: [baseSepolia],
-    connectors: [
-      injected(),
-      coinbaseWallet({
-        appName: 'Create Wagmi',
-        preference: 'smartWalletOnly',
-      }),
-    ],
-    storage: createStorage({
-      storage: cookieStorage,
+export const config = createConfig({
+  chains: [baseSepolia],
+  connectors: [
+    injected(),
+    coinbaseWallet({
+      appName: "Create Wagmi",
+      preference: "smartWalletOnly",
     }),
-    ssr: true,
-    transports: {
-      [baseSepolia.id]: http(),
-    },
-  });
-}
+  ],
+  storage: createStorage({
+    storage: cookieStorage,
+  }),
+  ssr: false,
+  transports: {
+    [baseSepolia.id]: http(),
+  },
+});
 
-declare module 'wagmi' {
-  interface Register {
-    config: ReturnType<typeof getConfig>;
-  }
-}
+// declare module "wagmi" {
+//   interface Register {
+//     config: ReturnType<typeof getConfig>;
+//   }
+// }

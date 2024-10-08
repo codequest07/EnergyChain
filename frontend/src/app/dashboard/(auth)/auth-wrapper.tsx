@@ -1,11 +1,4 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Auth | Energy-chain",
-  description: "Welcome to Energy-Chain",
-};
-
-export default function AuthLayout({
+export default function AuthWrapper({
   children,
 }: Readonly<{
   children: React.ReactNode;

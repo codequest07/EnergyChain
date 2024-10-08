@@ -1,10 +1,13 @@
 "use client";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Menu, X, Zap } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useAccount } from "wagmi";
 
 export default function NavBarr() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isConnected, address } = useAccount();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);

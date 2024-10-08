@@ -1,27 +1,34 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider } from "wagmi";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 
-import { getConfig } from "@/utils/config";
+import { config } from "@/utils/config";
+// import { getConfig } from "@/utils/config";
 import { OnchainKitProvider } from "@coinbase/onchainkit";
-import {baseSepolia} from 'viem/chains';
+import { base, baseSepolia } from "viem/chains";
+import { type ReactNode, useState } from "react";
+import { type State, WagmiProvider } from "wagmi";
 
-const config = getConfig();
+type Props = {
+  children: ReactNode;
+  initialState: State | undefined;
+};
 
-const queryClient = new QueryClient();
-
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children, initialState }: Props) {
+  // const [config] = useState(() => getConfig());
+  const [queryClient] = useState(() => new QueryClient());
   return (
-    <WagmiProvider config={config}>
+    <WagmiProvider config={config} initialState={initialState}>
       <QueryClientProvider client={queryClient}>
-        <OnchainKitProvider
-          apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
-          chain={baseSepolia}
-        >
-          <RainbowKitProvider>{children}</RainbowKitProvider>
-        </OnchainKitProvider>
+        <RainbowKitProvider>
+          {/* <OnchainKitProvider
+            apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
+            chain={baseSepolia}
+          > */}
+          {children}
+          {/* </OnchainKitProvider> */}
+        </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
