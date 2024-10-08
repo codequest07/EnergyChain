@@ -1,11 +1,42 @@
-import {
-  scrollSepolia
-} from 'wagmi/chains';
+// import {
+//   baseSepolia
+// } from 'wagmi/chains';
 
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-export const config = getDefaultConfig({
-  appName: 'My RainbowKit App',
-  projectId: 'c59e86f04bdb6a22343b9337956b2368',
-  chains: [scrollSepolia],
-  ssr: true, // If your dApp uses server side rendering (SSR)
-});
+// import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+// export const config = getDefaultConfig({
+//   appName: 'EnergyChain',
+//   projectId: 'c59e86f04bdb6a22343b9337956b2368',
+//   chains: [baseSepolia],
+//   ssr: true, // If your dApp uses server side rendering (SSR)
+// });
+
+
+import { http, cookieStorage, createConfig, createStorage } from 'wagmi';
+import { baseSepolia } from 'wagmi/chains';
+import { coinbaseWallet, injected } from 'wagmi/connectors';
+
+export function getConfig() {
+  return createConfig({
+    chains: [baseSepolia],
+    connectors: [
+      injected(),
+      coinbaseWallet({
+        appName: 'Create Wagmi',
+        preference: 'smartWalletOnly',
+      }),
+    ],
+    storage: createStorage({
+      storage: cookieStorage,
+    }),
+    ssr: true,
+    transports: {
+      [baseSepolia.id]: http(),
+    },
+  });
+}
+
+declare module 'wagmi' {
+  interface Register {
+    config: ReturnType<typeof getConfig>;
+  }
+}
