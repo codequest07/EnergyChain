@@ -57,48 +57,31 @@ const Header = () => {
           </nav>
         </SheetContent>
       </Sheet>
-    <div className="w-full flex-1">
-        <form>
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search products..."
-              className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-            />
+      <div className="sm:container sm:mx-auto flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+        <div className="flex items-center space-x-8">
+          <div>
+            <p className="text-sm text-[#575757] font-[400]">Your location</p>
+            <div className="flex items-center space-x-2">
+              <MemoGps className="h-5 w-5 text-[#373D20]" />
+              <p className="font-[500]">Awka, Anambra</p>
+            </div>
+          </div>
+          <div className="bg-[#FFF1F3] text-[#C01048] hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-[500]">
+            <p className="bg-[#F63D68] h-2 w-2 rounded-full" />{" "}
+            <p>You have 3.5KWH energy in surplus</p>
           </div>
         </div>
 
-    <div className="ml-auto flex items-center space-x-4">
-        <CustomConnectButton />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative h-8 w-8 rounded-full">
-              <Bell className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>New energy offer available</DropdownMenuItem>
-            <DropdownMenuItem>Your energy sale was completed</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <Menu className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Dashboard</DropdownMenuItem>
-            <DropdownMenuItem>Analytics</DropdownMenuItem>
-            <DropdownMenuItem>Trading</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <div className="hidden sm:flex space-x-2">
+          <Button
+            variant="outline"
+            className="bg-[#EFF1ED] text-[#766153] hover:bg-[#373D20] hover:text-[#FFFFFF] transition-colors duration-300 ease-in-out">
+            Buy energy
+          </Button>
+          <Button className="bg-[#373D20] text-[#FFFFFF] hover:bg-[#EFF1ED] hover:text-[#766153] transition-colors duration-300 ease-in-out">
+            Sell energy
+          </Button>
+        </div>
       </div>
     </header>
   );
