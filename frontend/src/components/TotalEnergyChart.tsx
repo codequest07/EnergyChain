@@ -86,17 +86,17 @@ export function TotalEnergyChart() {
             <Area
               dataKey="mobile"
               type="natural"
-              fill="var(--color-mobile)"
+              fill="hsla(72, 31%, 18%, 0.38)"
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
+              stroke="hsla(72, 31%, 18%, 1)"
               stackId="a"
             />
             <Area
               dataKey="desktop"
               type="natural"
-              fill="var(--color-desktop)"
+              fill="hsla(12, 60%, 50%, 0.38)"
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              stroke="hsla(12, 60%, 50%, 1)"
               stackId="a"
             />
           </AreaChart>
