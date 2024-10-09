@@ -18,10 +18,19 @@ export function Basenames({ address }: DisplayBasenameProps) {
       hasCopyAddressOnClick={true}
       className="w-full relative"
     >
+      
+      <Avatar 
+        address={address} 
+        // @ts-ignore
+        chain={baseSepolia} 
+      />
       // @ts-ignore
-      <Avatar address={address} chain={baseSepolia} />
-      // @ts-ignore
-      <Name address={address} chain={baseSepolia} className="truncate w-full text-blue-400"/>
+      <Name 
+        address={address}
+        // @ts-ignore 
+        chain={baseSepolia} 
+        className="truncate w-full text-blue-400"
+      />
       <Address />
     </Identity>
   );

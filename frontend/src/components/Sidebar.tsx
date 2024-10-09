@@ -18,6 +18,7 @@ const Sidebar = () => {
   const [avatarUrl, setAvatarUrl] = useState("");
 
   async function fetchBasename(address: `0x${string}`) {
+    // @ts-ignore
     const basename = await getName({ address, chain: baseSepolia });
     console.log(basename);
     if(basename) setName(basename);
