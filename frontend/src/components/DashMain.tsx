@@ -4,12 +4,19 @@ import ProsumerScoreCard from "./cards/ProsumerScoreCard";
 import StatisticCard from "./cards/StatisticCard";
 import EnergyMetrics from "./Energy-metrics";
 import MainDashHeader from "./MainDashHeader";
+import { TotalEnergyChart } from "./TotalEnergyChart";
+import { MarketplaceActivity } from "./MarketplaceActivity";
+import { Assets } from "./Assets";
 const DashMain = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <MainDashHeader />
-      <div className=" p-4 md:p-5 pt-2">
+      <div className="flex gap-4 p-4 md:p-5 pt-2">
         <ProsumerScoreCard />
+        <TotalEnergyChart />
+      </div>
+      <div className="p-4">
+        <EnergyMetrics />
       </div>
       <div className="p-4">
         <EnergyMetrics />
@@ -28,6 +35,16 @@ const DashMain = () => {
           />
         ))}
       </div>
+      <div className="p-4">
+        <EnergyMetrics />
+      </div>
+      {/* max-w-7xl mx-auto */}
+      <div className=" p-4">
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+           <MarketplaceActivity />
+           <Assets />
+         </div>
+       </div>
     </div>
   );
 };
