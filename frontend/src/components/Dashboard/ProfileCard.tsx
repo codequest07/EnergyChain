@@ -30,21 +30,21 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   };
 
   return (
-    <div className="flex items-center space-x-3 p-2">
+    <div className="flex items-center space-x-3 p-2 w-full">
       {/* Profile Image */}
       {profileImage}
 
       {/* Name and Wallet Address */}
-      <div className="flex flex-col">
-        <span className="font-[500] text-[#21250F]">{name}</span>
-        <span className="text-sm text-[#575757]">{walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}</span>
+      <div className="flex flex-col w-2/5">
+        <span className="font-[500]  truncate text-[#21250F]">{name}</span>
+        <span className="text-sm truncate text-[#575757]">{walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}</span>
       </div>
 
       {/* Copy Icon */}
       <button
         onClick={handleCopy}
-        className="ml-2 text-gray-400 hover:text-gray-600">
-        <MemoCopy className="w-4 h-4" />
+        className="ml-1 text-gray-400 hover:text-gray-600">
+        <MemoCopy className="w-4 h-4"/>
       </button>
     </div>
   );
