@@ -1,9 +1,12 @@
 import { DashboardLayout } from "@/components/Dashboard";
+import CreateBuyAdInterface from "@/components/Energy-Marketplace/Create-buy-ads-interface";
+import SellEnergyInterface from "@/components/Energy-Marketplace/Sell-energy-interface";
 
 const page = () => {
   return (
     <DashboardLayout>
-      <h1>Account</h1>
+      <SellEnergyInterface />
+      <CreateBuyAdInterface />
     </DashboardLayout>
   );
 };
