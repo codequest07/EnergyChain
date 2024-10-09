@@ -18,7 +18,7 @@ export default function SellEnergyInterface() {
           <Button variant="ghost" size="icon">
             <MemoArrowLeft className="h-6 w-6" />
           </Button>
-          <CardTitle className="text-xl font-medium">Sell energy</CardTitle>
+          <CardTitle className="text-base font-[500]">Sell energy</CardTitle>
         </div>
       </CardHeader>
 
