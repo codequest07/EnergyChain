@@ -4,12 +4,16 @@ import ProsumerScoreCard from "./ProsumerScoreCard";
 import StatisticCard from "./StatisticCard";
 import EnergyMetrics from "./Energy-metrics";
 import MainDashHeader from "./MainDashHeader";
+import { MarketplaceActivity } from "../MarketplaceActivity";
+import { Assets } from "../Assets";
+import { TotalEnergyChart } from "../TotalEnergyChart";
 const DashMain = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <MainDashHeader />
-      <div className=" p-4 md:p-5 pt-2">
+      <div className="flex gap-4 p-4 md:p-5 pt-2">
         <ProsumerScoreCard />
+        <TotalEnergyChart />
       </div>
       <div className="p-4">
         <EnergyMetrics />
@@ -27,6 +31,11 @@ const DashMain = () => {
             textColor={data.textColor}
           />
         ))}
+      </div>
+
+      <div className="grid grid-cols-3">
+        <MarketplaceActivity />
+        <Assets />
       </div>
     </div>
   );
