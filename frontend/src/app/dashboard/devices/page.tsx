@@ -1,7 +1,15 @@
-import { DashboardLayout } from "@/components/Dashboard";
+import React from 'react'
+import { DashboardLayout } from '@/components/Dashboard'
+import DeviceChart from '@/components/Devices/DeviceChart'
+import Devices from '@/components/Devices'
 
-const page = () => {
-  return <DashboardLayout>page</DashboardLayout>;
-};
+const DevicesPage = () => {
+  return (
+    <DashboardLayout>
+        <Devices />
+        {/* <DeviceChart /> */}
+    </DashboardLayout>
+  )
+}
 
-export default page;
+export default DevicesPage

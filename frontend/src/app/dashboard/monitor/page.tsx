@@ -1,10 +1,10 @@
-import BuyEnergy from "@/components/BuyEnergy";
 import { DashboardLayout } from "@/components/Dashboard";
+import EnergyMonitoring from "@/components/Energy-monitoring";
 
 const page = () => {
   return (
     <DashboardLayout>
-      <BuyEnergy />
+      <EnergyMonitoring />
     </DashboardLayout>
   );
 };
