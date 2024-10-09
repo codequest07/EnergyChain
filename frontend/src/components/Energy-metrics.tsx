@@ -13,31 +13,37 @@ import {
 const CircularProgressBar = ({
   percentage,
   color,
+  bg,
 }: {
   percentage: number;
   color: string;
+  bg: string;
 }) => (
-  <div className="relative w-16 h-16">
-    <svg className="w-full h-full" viewBox="0 0 100 100">
+  <div className="relative w-24 h-12">
+    <svg className="w-full h-full" viewBox="0 0 100 50">
       <circle
-        className="text-gray-200 stroke-current"
-        strokeWidth="10"
+        className={`stroke-current ${bg}`} // Correctly apply bg class
+        strokeWidth="6" // Adjust strokeWidth for a thinner appearance
         cx="50"
         cy="50"
         r="40"
-        fill="transparent"></circle>
+        fill="transparent"
+        strokeDasharray="125.6637 125.6637" // Half of the full circle circumference
+        transform="rotate(180 50 50)" // Flip the circle to start from the left
+      ></circle>
       <circle
         className={`stroke-current ${color}`}
-        strokeWidth="10"
+        strokeWidth="6" // Adjust strokeWidth for a thinner appearance
         strokeLinecap="round"
         cx="50"
         cy="50"
         r="40"
         fill="transparent"
-        strokeDasharray={`${percentage * 2.51327} 251.327`}
-        transform="rotate(-90 50 50)"></circle>
+        strokeDasharray={`${(percentage / 100) * 125.6637} 125.6637`}
+        transform="rotate(180 50 50)" // Flip the progress arc as well
+      ></circle>
     </svg>
-    <span className="absolute inset-0 flex items-center justify-center text-sm font-medium">
+    <span className="absolute inset-0 flex mt-5 items-center justify-center text-sm font-medium">
       {percentage}%
     </span>
   </div>
@@ -48,20 +54,22 @@ const MetricCard = ({
   value,
   percentage,
   color,
+  bg,
 }: {
   title: string;
   value: number;
   percentage: number;
   color: string;
+  bg: string;
 }) => (
   <div>
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-      <CardTitle className="text-sm font-[400] text-[#808080]">
+      <CardTitle className="text-xs font-[400] text-[#808080]">
         {title}
       </CardTitle>
-      <CircularProgressBar percentage={percentage} color={color} />
+      <CircularProgressBar percentage={percentage} color={color} bg={bg} />{" "}
     </CardHeader>
-    <CardContent>
+    <CardContent className="flex items-center space-x-2">
       <div className="text-2xl font-bold">{value.toLocaleString()}</div>
       <p className="text-xs text-muted-foreground">kWh</p>
     </CardContent>
@@ -77,21 +85,30 @@ export default function EnergyMetrics() {
       title: "Energy in use (locally)",
       value: 50746,
       percentage: 20,
-      color: "text-green-500",
+      color: "text-[#47682C]",
+      bg: "text-[#47682C30]",
     },
     {
       title: "Energy in surplus",
       value: 50746,
       percentage: 10,
-      color: "text-orange-500",
+      color: "text-[#CD5334]",
+      bg: "text-[#CD533430]",
     },
     {
       title: "Energy sold",
       value: 50746,
       percentage: 70,
-      color: "text-blue-500",
+      color: "text-[#0460FF]",
+      bg: "text-[#0460FF30]",
     },
-    { title: "Energy bought", value: 0, percentage: 0, color: "text-pink-500" },
+    {
+      title: "Energy bought",
+      value: 0,
+      percentage: 0,
+      color: "text-[#FF043230]",
+      bg: "text-[#FF043230]",
+    },
   ];
 
   return (
@@ -112,7 +129,7 @@ export default function EnergyMetrics() {
         </Select>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           {metrics.map((metric, index) => (
             <MetricCard key={index} {...metric} />
           ))}

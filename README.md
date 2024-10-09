@@ -1,9 +1,8 @@
-# Icarus: Decentralized Energy Marketplace DApp on Scroll Sepolia
+# Energy Chain: Decentralized Energy Marketplace DApp on Scroll Sepolia
 
 ## Problem we aim to solve!
 
 Our inspiration stems from the pressing issue of insufficient power supply in Africa. Energy access remains a major challenge across the continent, and this platform was conceived to address that gap. By decentralizing power supply, we aim to empower renewable energy producers and power plant operators to safely and efficiently extend energy access to those in need. Our goal is to create a more sustainable, reliable, and equitable energy system that benefits both producers and consumers, contributing to the continent's growth and development.
-
 
 ## Problem we aim to solve!
 
@@ -13,24 +12,22 @@ Check out our pitch deck here: https://drive.google.com/file/d/1DEHKmNRdKCEFtiYo
 
 check out our live demo video here: https://www.loom.com/share/0b3fa8026eec4d1fb997e8b882f5fce5?sid=6593157c-c10a-4fb5-82f8-52ddb71f6eae
 
+## Problem we aim to solve!
+
+Our inspiration stems from the pressing issue of insufficient power supply in Africa. Energy access remains a major challenge across the continent, and this platform was conceived to address that gap. By decentralizing power supply, we aim to empower renewable energy producers and power plant operators to safely and efficiently extend energy access to those in need. Our goal is to create a more sustainable, reliable, and equitable energy system that benefits both producers and consumers, contributing to the continent's growth and development.
+
+## Problem we aim to solve!
+
+Our inspiration stems from the pressing issue of insufficient power supply in Africa. Energy access remains a major challenge across the continent, and this platform was conceived to address that gap. By decentralizing power supply, we aim to empower renewable energy producers and power plant operators to safely and efficiently extend energy access to those in need. Our goal is to create a more sustainable, reliable, and equitable energy system that benefits both producers and consumers, contributing to the continent's growth and development.
+
+Check out our pitch deck here: https://drive.google.com/file/d/1DEHKmNRdKCEFtiYoxM8zxI__cjb_IBHK/view?usp=sharing
 
 ## Project Overview
 
 The **Decentralized Energy Marketplace** aims to revolutionize energy trading by creating a transparent, efficient, and user-friendly platform for energy producers and consumers. This innovative project will leverage blockchain technology to establish a single smart contract where energy producers can list their available energy credits, allowing for seamless and transparent transactions. The platform is built on the **SCROLL network**, leveraging its scalability and efficiency for energy transactions provided by the **ALCHEMY RPC-URL**
 
-Deployed Smart contract on Scroll Sepolia Testnet: https://sepolia.scrollscan.com/address/0xA1103E6490ab174036392EbF5c798C9DaBAb24EE
-https://sepolia.scrollscan.com/address/0x2C0457F82B57148e8363b4589bb3294b23AE7625#code
-
-Live Link to interact: https://energyy-chain.vercel.app/
-
-
-### Objectives
-
-1. Facilitate peer-to-peer energy trading
-2. Promote sustainable energy usage
-3. Create a user-friendly interface for energy transactions
-4. Ensure secure and transparent energy trading using blockchain technology
-5. Build a community-driven marketplace for renewable energy
+Deployed Smart contract on Scroll Sepolia Testnet: .....deployed link
+Live Link to interact: live-link.on.vercel
 
 **Key Features:**
 
@@ -52,7 +49,6 @@ Live Link to interact: https://energyy-chain.vercel.app/
 - Community-driven marketplace
 - Integration with Rainbow Kit for easy wallet connection
 
-
 ## Technologies Used
 
 - Frontend: Next.js, Typescript, Wagmi, Ethers.js
@@ -69,25 +65,22 @@ The project is divided into two main directories:
 
 1. `frontend`: Contains the frontend React application
 2. `smart-contracts`: Contains the smart contract and related files
-
-```
-.
-├── frontend/
-│ ├── src/
-│ │ ├── app/
-│ │ ├── components/
-│ │ ├── lib/
-│ │ └── ...
-│ ├── package.json
-│ └── tailwind.config.ts
-├── smart-contracts/
-│ ├── contracts/
-│ │ └── Energy.sol
-│ │ └── ICAR.sol
-│ ├── hardhat.config.ts
-│ └── package.json
-└── README.md
-```
+   .
+   ├── frontend/
+   │ ├── src/
+   │ │ ├── app/
+   │ │ ├── components/
+   │ │ ├── lib/
+   │ │ └── ...
+   │ ├── package.json
+   │ └── tailwind.config.ts
+   ├── smart-contracts/
+   │ ├── contracts/
+   │ │ └── Energy.sol
+   │ │ └── ICAR.sol
+   │ ├── hardhat.config.ts
+   │ └── package.json
+   └── README.md
 
 ## Smart Contracts
 
@@ -110,9 +103,11 @@ npm install
 ```
 
 ### Frontend Setup (frontend directory)
+
 For detailed instructions on setting up the frontend, please refer to the [Client README](./frontend/README.md).
 
 ### Smart Contract Setup (smart-contracts directory)
+
 For detailed instructions on setting up and deploying the smart contracts, please refer to the [Hardhat Contracts README](./smart-contracts/README.md).
 
 ## Environment Variables

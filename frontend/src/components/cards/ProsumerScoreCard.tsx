@@ -14,17 +14,14 @@ import MemoProsumerIcon from "@/icons/ProsumerIcon";
 import MemoArrowDown from "@/icons/ArrowDown";
 
 export default function ProsumerScoreCard() {
-  const [selectedAddress, setSelectedAddress] = useState("0x345...sjd89");
+  const [selectedAddress, setSelectedAddress] = useState("mgbeke.base.eth");
 
-  const addresses = ["0x345...sjd89", "0x123...abc45", "0x789...xyz01"];
+  const addresses = ["mgbeke.base.eth", "joel.eth", "Don.eth"];
 
   return (
     <Card className="w-full max-w-md overflow-hidden">
       <CardHeader className="bg-[#C9DDB5]">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-[400] text-[#575757]">
-            Prosumer score card
-          </h2>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button className="h-8 hover:bg-transparent text-[#21250F] focus:ring-0 focus-visible:ring-0 bg-transparent shadow-none outline-none  justify-start text-left font-[400]">
@@ -47,11 +44,11 @@ export default function ProsumerScoreCard() {
       </CardHeader>
       <CardContent className="p-6 flex flex-col mt-16 ">
         <MemoProsumerIcon className="w-24 h-24" />
-        <h3 className="mt-4 text-sm text-[#575757] font-[500]">Nwamaka,</h3>
-        <p className="mt-2 text-[#21250F] text-xl  font-[500]">
-          You produce more than you consume.
-          <br />
-          That's some hero sh*t!
+        <h3 className="mt-4 text-sm text-[#575757] font-[400]">
+          Energy balance
+        </h3>
+        <p className="mt-2 text-[#21250F] text-xl  font-[600]">
+          54,758.08 <span className="text-[#575757] text-xs">KWH</span>
         </p>
       </CardContent>
     </Card>

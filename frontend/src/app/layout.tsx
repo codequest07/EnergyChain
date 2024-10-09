@@ -6,8 +6,8 @@ import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "energy-chain",
-  description: "energy-chain",
+title: "energyy-chain",
+  description: "energyy-chain",
 };
 
 export default function RootLayout({

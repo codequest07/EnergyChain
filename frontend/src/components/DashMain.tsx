@@ -3,15 +3,23 @@ import { Statistics } from "@/utils/data";
 import ProsumerScoreCard from "./cards/ProsumerScoreCard";
 import StatisticCard from "./cards/StatisticCard";
 import EnergyMetrics from "./Energy-metrics";
+import MainDashHeader from "./MainDashHeader";
 import { TotalEnergyChart } from "./TotalEnergyChart";
 import { MarketplaceActivity } from "./MarketplaceActivity";
 import { Assets } from "./Assets";
 const DashMain = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="flex gap-4 p-4 md:p-8 pt-6">
+      <MainDashHeader />
+      <div className="flex gap-4 p-4 md:p-5 pt-2">
         <ProsumerScoreCard />
         <TotalEnergyChart />
+      </div>
+      <div className="p-4">
+        <EnergyMetrics />
+      </div>
+      <div className="p-4">
+        <EnergyMetrics />
       </div>
       <div className="grid sm:grid-cols-4 grid-cols-1 gap-3 p-4">
         {Statistics.map((data, index) => (

@@ -1,5 +1,5 @@
 import { DashboardLayout } from "@/components/Dashboard";
-import DashMain from "@/components/DashMain";
+import DashMain from "@/components/Dashboard/DashMain";
 
 const page = () => {
   return (
