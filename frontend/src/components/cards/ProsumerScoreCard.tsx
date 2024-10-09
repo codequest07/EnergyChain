@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import MemoProsumerIcon from "@/icons/ProsumerIcon";
 import MemoArrowDown from "@/icons/ArrowDown";
+import MemoBaseIcon from "@/icons/BaseIcon";
 
 export default function ProsumerScoreCard() {
   const [selectedAddress, setSelectedAddress] = useState("mgbeke.base.eth");
@@ -25,6 +25,7 @@ export default function ProsumerScoreCard() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button className="h-8 hover:bg-transparent text-[#21250F] focus:ring-0 focus-visible:ring-0 bg-transparent shadow-none outline-none  justify-start text-left font-[400]">
+                <MemoBaseIcon className="w-24 h-24" />
                 <span>{selectedAddress}</span>
                 <MemoArrowDown className="ml-2 h-4 w-4 shrink-0 " />
               </Button>

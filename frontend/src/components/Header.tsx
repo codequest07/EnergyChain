@@ -6,8 +6,18 @@ import Link from "next/link";
 import { navItems } from "@/utils/data";
 import { usePathname } from "next/navigation";
 
+const pageTitles: { [key: string]: string } = {
+  "/dashboard": "Dashboard",
+  "/dashboard/devices": "Devices",
+  "/dashboard/wallet": "Wallet",
+  "/dashboard/marketplace": "Marketplace",
+  "/dashboard/listing": "My listing",
+  "/dashboard/account": "Account information",
+};
 const Header = () => {
-  const pathname = usePathname();
+  const pathname: string = usePathname();
+
+  const currentTitle = pageTitles[pathname] || "Dashboard";
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-[#FBFBFB] px-4 lg:h-[80px] lg:px-6">
       <Sheet>
@@ -45,7 +55,7 @@ const Header = () => {
 
       <div className="sm:container sm:mx-auto flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
         <div className="flex items-center space-x-4">
-          <h1 className="font-[500] text-xl text-[#21250F]">Dashboard</h1>
+          <h1 className="font-[500] text-xl text-[#21250F]">{currentTitle}</h1>{" "}
           <div className="bg-[#FFF1F3] text-[#C01048] hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-[500]">
             <p className="bg-[#F63D68] h-2 w-2 rounded-full" />{" "}
             <p>You have 3.5KWH surplus</p>
