@@ -1,6 +1,7 @@
 "use client";
 import { navItems } from "@/utils/data";
 import Link from "next/link";
+import Image from 'next/image';
 import { usePathname } from "next/navigation";
 import ProfileCard from "@/components/Dashboard/ProfileCard";
 import MemoUser from "@/icons/User";
