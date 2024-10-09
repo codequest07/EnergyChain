@@ -1,4 +1,6 @@
-import React from "react";
+"use client"
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -14,13 +16,23 @@ import {
 } from "@/icons";
 import Image from "next/image";
 import { Basenames } from "@/components/basename";
-import { useAccount, useWalletClient } from 'wagmi';
-import { config } from "@/utils/config";
-
-// if(config !== undefined) return 
+import { useAccount, useConnect, useWalletClient, useConnectors } from 'wagmi';
+import { baseSepolia } from "viem/chains";
+import { useRouter } from "next/navigation";
 
 const CreateAccount = () => {
+  const { connect } = useConnect()
   const { address, isConnected } = useAccount();
+  const connectors = useConnectors();
+  const router = useRouter();
+
+  useEffect(() => {
+    if(isConnected && address) {
+      router.push('/dashboard')
+    }
+  }, [isConnected, address])
+
+  const [email, setEmail] = useState<string | undefined>();
   return (
     <div className="bg-white h-full flex flex-col p-8">
       <header className="flex items-center justify-between">
@@ -42,13 +54,13 @@ const CreateAccount = () => {
           </p>
         </div>
         <div className="my-8">
-          <ConnectButton/>
           {isConnected ? (
             <Basenames address={address} />
           ) : (
             <Button
               variant={"outline"}
               className="flex items-center font-medium p-4 gap-4"
+              onClick={() => connect({chainId: baseSepolia.id, connector: connectors[0]})}
             >
               <span className="text-[16px]">Connect your wallet</span>
               <span className="flex items-center gap-2">
@@ -69,8 +81,10 @@ const CreateAccount = () => {
               id="email"
               placeholder="Enter your email address"
               className="flex-1 outline-none shadow-none"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
             />
-            <Button className="bg-[#373D2040] text-white px-2 py-0.5">
+            <Button className="bg-[#373D2040] hover:bg-[#373D20] text-white px-2 py-0.5">
               <ArrowRight className="" />
             </Button>
           </div>

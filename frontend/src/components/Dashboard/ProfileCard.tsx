@@ -37,7 +37,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       {/* Name and Wallet Address */}
       <div className="flex flex-col">
         <span className="font-[500] text-[#21250F]">{name}</span>
-        <span className="text-sm text-[#575757]">{walletAddress}</span>
+        <span className="text-sm text-[#575757]">{walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}</span>
       </div>
 
       {/* Copy Icon */}

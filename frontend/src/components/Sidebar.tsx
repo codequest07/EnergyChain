@@ -2,11 +2,41 @@
 import { navItems } from "@/utils/data";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import ProfileCard from "./cards/ProfileCard";
+import ProfileCard from "@/components/Dashboard/ProfileCard";
 import MemoUser from "@/icons/User";
+import { useAccount } from 'wagmi';
+import { useState, useEffect } from 'react';
+// import { Basenames } from "./basename";
+import { getName, getAvatar } from '@coinbase/onchainkit/identity';
+import { baseSepolia } from 'viem/chains';
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const { address, isConnected } = useAccount();
+  const [name, setName] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+
+  async function fetchBasename(address: `0x${string}`) {
+    const basename = await getName({ address, chain: baseSepolia });
+    console.log(basename);
+    if(basename) setName(basename);
+  }
+
+  async function fetchAvatar(name: string) {
+    // @ts-ignore
+    const baseAvatar = await getAvatar({ ensName: name, chain: baseSepolia });
+    console.log(baseAvatar);
+    if(baseAvatar) setAvatarUrl(baseAvatar)
+  }
+
+  useEffect(() => {
+    if(isConnected && address) {
+      fetchBasename(address as `0x${string}`);
+    }
+    if(name) {
+      fetchAvatar(name);
+    }
+  }, [isConnected, address, name]);
 
   return (
     <div className="hidden border-r bg-muted/40 md:block">
@@ -21,7 +51,7 @@ const Sidebar = () => {
           </Link>
         </div>
         <div className="flex-1">
-          <nav className="grid items-start px-2 py-6 text-base font-medium lg:px-4">
+          <nav className="grid items-start px-2 py-6 text-base font-medium lg:px-4 gap-2">
             {navItems.map((item) => (
               <Link
                 key={item.name}
@@ -45,13 +75,17 @@ const Sidebar = () => {
           </nav>
         </div>
         <div className="p-4">
+        {isConnected && (
           <ProfileCard
-            name="Nwamaka Akah"
-            walletAddress="0x34583ji...sjdi88"
+            // @ts-ignore
+            name={name || `${address.slice(0, 6)}...${address.slice(-4)}`}
+            walletAddress={address as string}
             profileImage={
-              <MemoUser className="w-10 h-10 rounded-full object-cover" />
+              // @ts-ignore
+              avatarUrl ? <Image src={avatarUrl} width={20} height={20} className="w-10 h-10 rounded-full object-cover" alt="baseAvatar"/> : <MemoUser className="w-10 h-10 rounded-full object-cover"/>
             }
           />
+        )}           
         </div>
       </div>
     </div>

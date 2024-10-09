@@ -5,6 +5,8 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import Link from "next/link";
 import { navItems } from "@/utils/data";
 import { usePathname } from "next/navigation";
+// import { useAccount } from 'wagmi';
+// import { Basenames } from "./basename";
 
 const pageTitles: { [key: string]: string } = {
   "/dashboard": "Dashboard",
@@ -16,6 +18,7 @@ const pageTitles: { [key: string]: string } = {
 };
 const Header = () => {
   const pathname: string = usePathname();
+  // const { address, isConnected } = useAccount();
 
   const currentTitle = pageTitles[pathname] || "Dashboard";
   return (
