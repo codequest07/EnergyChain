@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -12,6 +12,7 @@ import Link from "next/link";
 
 export default function MarketplacePage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<string>("buy");
 
   useEffect(() => {
@@ -20,6 +21,14 @@ export default function MarketplacePage() {
       setActiveTab(tabFromUrl);
     }
   }, [searchParams]);
+
+  const handleCreateAd = () => {
+    if (activeTab === "buy") {
+      router.push("/dashboard/marketplace/create-buy-ads");
+    } else {
+      router.push("/dashboard/marketplace/create-sell-ads");
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -44,7 +53,9 @@ export default function MarketplacePage() {
                 <MemoFilters className="w-4 h-4" />
                 <p>More filters</p>
               </Button>
-              <Button className="bg-[#373D20] text-white hover:bg-[#373D20]">
+              <Button
+                className="bg-[#373D20] text-white hover:bg-[#373D20]"
+                onClick={handleCreateAd}>
                 Create a {activeTab === "buy" ? "buy" : "sell"} ad
               </Button>
             </div>

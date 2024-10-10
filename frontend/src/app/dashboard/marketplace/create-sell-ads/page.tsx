@@ -4,7 +4,7 @@ import CreateSellAdInterface from "@/components/Energy-Marketplace/Create-sell-a
 const page = () => {
   return (
     <DashboardLayout>
-      <h2>Wallet</h2>
+      <CreateSellAdInterface />
     </DashboardLayout>
   );
 };
