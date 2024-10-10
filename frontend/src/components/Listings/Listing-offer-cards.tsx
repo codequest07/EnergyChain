@@ -3,15 +3,25 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { BuyAds, energyData, sellData } from "@/utils/data";
+import { BuyAds, sellData } from "@/utils/data";
 
 import BuyEnergyAds from "./BuyEnergyAds";
 import SellEnergyAds from "./SellEnergyAds";
 import { DrawerDemo } from "./Details";
+import { useRouter } from "next/navigation";
 
 export default function ListingOfferCards() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("buy");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const handleCreateAd = () => {
+    if (activeTab === "buy") {
+      router.push("/dashboard/marketplace/create-buy-ads");
+    } else {
+      router.push("/dashboard/marketplace/create-sell-ads");
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -33,7 +43,9 @@ export default function ListingOfferCards() {
 
             {/* Button container with Flexbox */}
             <div className="flex space-x-4 sm:justify-end">
-              <Button className="bg-[#373D20] text-white hover:bg-[#373D20]">
+              <Button
+                onClick={handleCreateAd}
+                className="bg-[#373D20] text-white hover:bg-[#373D20]">
                 Create a {activeTab === "buy" ? "buy" : "sell"} ad
               </Button>
             </div>

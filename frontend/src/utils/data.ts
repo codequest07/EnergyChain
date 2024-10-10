@@ -16,6 +16,7 @@ import MemoPlug from "@/icons/Plug";
 import MemoSchool from "@/icons/School";
 import MemoWallet from "@/icons/Wallet";
 
+export const totalEnergyProduced = 54758.08;
 export const navItems = [
   {
     name: "Dashboard",
@@ -484,5 +485,53 @@ export const BuyAds = [
     type: "Hotels / Guest homes",
     icon: MemoHotels,
     expires: "30D : 24H : 10M",
+  },
+];
+
+export const metrics = [
+  {
+    title: "Energy in use (locally)",
+    value: 50746,
+    percentage: 20,
+    color: "text-[#47682C]",
+    bg: "text-[#47682C30]",
+  },
+  {
+    title: "Energy in surplus",
+    value: 50746,
+    percentage: 10,
+    color: "text-[#CD5334]",
+    bg: "text-[#CD533430]",
+  },
+  {
+    title: "Energy sold",
+    value: 50746,
+    percentage: 70,
+    color: "text-[#0460FF]",
+    bg: "text-[#0460FF30]",
+  },
+  {
+    title: "Energy bought",
+    value: 0,
+    percentage: 0,
+    color: "text-[#FF043230]",
+    bg: "text-[#FF043230]",
+  },
+];
+
+export const metricsData = [
+  {
+    title: "Energy in use (locally)",
+    value: 50746,
+    percentage: 20,
+    color: "text-[#47682C]",
+    bg: "text-[#47682C30]",
+  },
+  {
+    title: "Energy in surplus",
+    value: 50746,
+    percentage: 10,
+    color: "text-[#CD5334]",
+    bg: "text-[#CD533430]",
   },
 ];

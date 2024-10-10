@@ -12,7 +12,11 @@ import {
 import MemoProsumerIcon from "@/icons/ProsumerIcon";
 import MemoArrowDown from "@/icons/ArrowDown";
 
-export default function ProsumerScoreCard() {
+interface ProsumerScoreCardProps {
+  className?: string;
+}
+
+export default function ProsumerScoreCard({ className }: ProsumerScoreCardProps) {
   const [selectedAddress, setSelectedAddress] = useState("mgbeke.base.eth");
 
   const addresses = ["mgbeke.base.eth", "joel.eth", "Don.eth"];
@@ -40,8 +44,8 @@ export default function ProsumerScoreCard() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </CardHeader>
-      <CardContent className="p-6 flex flex-col mt-16 ">
+      </CardHeader> 
+      <CardContent className={`p-6 flex flex-col ${className}`}>
         <MemoProsumerIcon className="w-24 h-24" />
         <h3 className="mt-4 text-sm text-[#575757] font-[400]">
           Energy balance

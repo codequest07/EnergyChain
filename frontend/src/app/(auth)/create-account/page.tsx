@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ArrowRight } from "lucide-react";
 import {
   icon_discord,
@@ -16,23 +16,58 @@ import {
 } from "@/icons";
 import Image from "next/image";
 import { Basenames } from "@/components/basename";
-import { useAccount, useConnect, useWalletClient, useConnectors } from 'wagmi';
+import {
+  useAccount,
+  useConnect,
+  useDisconnect,
+  useWalletClient,
+  useConnectors,
+} from "wagmi";
 import { baseSepolia } from "viem/chains";
 import { useRouter } from "next/navigation";
 
 const CreateAccount = () => {
-  const { connect } = useConnect()
+  const { connect } = useConnect();
+  const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
   const connectors = useConnectors();
   const router = useRouter();
 
-  useEffect(() => {
-    if(isConnected && address) {
-      router.push('/dashboard')
-    }
-  }, [isConnected, address])
-
+  const [hasAttemptedConnection, setHasAttemptedConnection] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [email, setEmail] = useState<string | undefined>();
+
+  useEffect(() => {
+    // Disconnect on initial load
+    if (!isInitialized) {
+      disconnect();
+      setIsInitialized(true);
+    }
+  }, [disconnect, isInitialized]);
+
+  useEffect(() => {
+    if (isConnected && address && hasAttemptedConnection) {
+      router.push("/dashboard");
+    }
+  }, [isConnected, address, hasAttemptedConnection, router]);
+
+  const handleConnect = () => {
+    setHasAttemptedConnection(true);
+    localStorage.setItem("hasConnected", "true");
+    connect({ chainId: baseSepolia.id, connector: connectors[0] });
+  };
+
+  const handleDisconnect = () => {
+    disconnect();
+    localStorage.removeItem("hasConnected");
+    setHasAttemptedConnection(false);
+  };
+
+  // Don't render until we've handled the initial disconnect
+  if (!isInitialized) {
+    return null; // or a loading spinner
+  }
+
   return (
     <div className="bg-white h-full flex flex-col p-8">
       <header className="flex items-center justify-between">
@@ -55,13 +90,20 @@ const CreateAccount = () => {
         </div>
         <div className="my-8">
           {isConnected ? (
-            <Basenames address={address} />
+            <div className="flex flex-col gap-4">
+              <Basenames address={address} />
+              <Button
+                variant={"outline"}
+                className="text-red-500"
+                onClick={handleDisconnect}>
+                Disconnect (for testing)
+              </Button>
+            </div>
           ) : (
             <Button
               variant={"outline"}
               className="flex items-center font-medium p-4 gap-4"
-              onClick={() => connect({chainId: baseSepolia.id, connector: connectors[0]})}
-            >
+              onClick={handleConnect}>
               <span className="text-[16px]">Connect your wallet</span>
               <span className="flex items-center gap-2">
                 <Image src={icon_wallet} alt="wallet icon" />
@@ -82,7 +124,7 @@ const CreateAccount = () => {
               placeholder="Enter your email address"
               className="flex-1 outline-none shadow-none"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Button className="bg-[#373D2040] hover:bg-[#373D20] text-white px-2 py-0.5">
               <ArrowRight className="" />
@@ -109,12 +151,12 @@ const CreateAccount = () => {
           </div>
         </div>
         <p className="text-[#575757] mt-6 text-sm">
-          By continuing, you agree with our
-          <Link href="" className="text-[#CD5334]">
+          By continuing, you agree with our{" "}
+          <Link href="#" className="text-[#CD5334]">
             Terms Of Use
           </Link>{" "}
           and{" "}
-          <Link href="" className="text-[#CD5334]">
+          <Link href="#" className="text-[#CD5334]">
             Privacy Policy
           </Link>
         </p>

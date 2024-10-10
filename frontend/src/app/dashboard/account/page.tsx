@@ -1,10 +1,10 @@
 import { DashboardLayout } from "@/components/Dashboard";
-import CreateBuyAdInterface from "@/components/Energy-Marketplace/Create-buy-ads-interface";
+
 
 const page = () => {
   return (
     <DashboardLayout>
-      <CreateBuyAdInterface />
+      <h2>account</h2>
     </DashboardLayout>
   );
 };
