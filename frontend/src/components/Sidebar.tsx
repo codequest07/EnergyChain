@@ -1,44 +1,59 @@
 "use client";
 import { navItems } from "@/utils/data";
 import Link from "next/link";
-import Image from 'next/image';
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import ProfileCard from "@/components/Dashboard/ProfileCard";
 import MemoUser from "@/icons/User";
-import { useAccount } from 'wagmi';
-import { useState, useEffect } from 'react';
-// import { Basenames } from "./basename";
-import { getName, getAvatar } from '@coinbase/onchainkit/identity';
-import { baseSepolia } from 'viem/chains';
+import { useAccount } from "wagmi";
+import { useState, useEffect } from "react";
+import { getName, getAvatar } from "@coinbase/onchainkit/identity";
+import { baseSepolia } from "viem/chains";
 
 const Sidebar = () => {
   const pathname = usePathname();
   const { address, isConnected } = useAccount();
-  const [name, setName] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [name, setName] = useState<string>("");
+  const [avatarUrl, setAvatarUrl] = useState<string>("");
 
   async function fetchBasename(address: `0x${string}`) {
-    // @ts-ignore
-    const basename = await getName({ address, chain: baseSepolia });
-    console.log(basename);
-    if(basename) setName(basename);
+    try {
+      // @ts-ignore
+      const basename = await getName({ address, chain: baseSepolia });
+      if (basename) {
+        setName(basename);
+        return basename;
+      }
+    } catch (error) {
+      console.error("Error fetching basename:", error);
+    }
+    return null;
   }
 
   async function fetchAvatar(name: string) {
-    // @ts-ignore
-    const baseAvatar = await getAvatar({ ensName: name, chain: baseSepolia });
-    console.log(baseAvatar);
-    if(baseAvatar) setAvatarUrl(baseAvatar)
+    try {
+      // @ts-ignore
+      const baseAvatar = await getAvatar({ ensName: name, chain: baseSepolia });
+      if (baseAvatar) {
+        setAvatarUrl(baseAvatar);
+      }
+    } catch (error) {
+      console.error("Error fetching avatar:", error);
+    }
   }
 
   useEffect(() => {
-    if(isConnected && address) {
-      fetchBasename(address as `0x${string}`);
+    async function fetchData() {
+      if (isConnected && address) {
+        const fetchedName = await fetchBasename(address as `0x${string}`);
+        if (fetchedName) {
+          await fetchAvatar(fetchedName);
+        }
+      }
     }
-    if(name) {
-      fetchAvatar(name);
-    }
-  }, [isConnected, address, name]);
+
+    fetchData();
+  }, [isConnected, address]);
 
   return (
     <div className="hidden border-r bg-muted/40 md:block">
@@ -60,10 +75,9 @@ const Sidebar = () => {
                 href={item.href}
                 className={`flex items-center gap-3 rounded-lg px-3 py-4 transition-all ${
                   pathname === item.href
-                    ? "bg-[#EFF1ED] text-[#766153]" // Active state styling
-                    : "text-[#575757] hover:bg-[#EFF1ED]" // Default state styling
+                    ? "bg-[#EFF1ED] text-[#766153]"
+                    : "text-[#575757] hover:bg-[#EFF1ED]"
                 }`}>
-                {/* Apply conditional color to the icon */}
                 <item.icon
                   className={`h-5 w-5 ${
                     pathname === item.href
@@ -77,17 +91,25 @@ const Sidebar = () => {
           </nav>
         </div>
         <div className="p-4">
-        {isConnected && (
-          <ProfileCard
-            // @ts-ignore
-            name={name || `${address.slice(0, 6)}...${address.slice(-4)}`}
-            walletAddress={address as string}
-            profileImage={
-              // @ts-ignore
-              avatarUrl ? <Image src={avatarUrl} width={20} height={20} className="w-10 h-10 rounded-full object-cover" alt="baseAvatar"/> : <MemoUser className="w-10 h-10 rounded-full object-cover"/>
-            }
-          />
-        )}           
+          {isConnected && address && (
+            <ProfileCard
+              name={name || `${address.slice(0, 6)}...${address.slice(-4)}`}
+              walletAddress={address}
+              profileImage={
+                avatarUrl ? (
+                  <Image
+                    src={avatarUrl}
+                    width={40}
+                    height={40}
+                    className="w-10 h-10 rounded-full object-cover"
+                    alt="baseAvatar"
+                  />
+                ) : (
+                  <MemoUser className="w-10 h-10 rounded-full object-cover" />
+                )
+              }
+            />
+          )}
         </div>
       </div>
     </div>

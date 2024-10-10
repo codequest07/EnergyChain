@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import "@rainbow-me/rainbowkit/styles.css";
-import '@coinbase/onchainkit/styles.css';
+import "@coinbase/onchainkit/styles.css";
 
 import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/toaster";
@@ -20,12 +20,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialState = cookieToInitialState(
-    config,
-    headers().get("cookie")
-  );
+  const initialState = cookieToInitialState(config, headers().get("cookie"));
   return (
-    <html lang="en">
+    <html lang="en" >
       <body>
         <Providers initialState={initialState}>{children}</Providers>
         <Toaster />
