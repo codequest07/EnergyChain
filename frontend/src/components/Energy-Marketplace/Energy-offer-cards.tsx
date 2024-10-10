@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { energyData, sellData } from "@/utils/data";
@@ -11,6 +11,7 @@ import MemoFilters from "@/icons/Filters";
 
 export default function EnergyOfferCards() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("buy");
 
   useEffect(() => {
@@ -22,6 +23,13 @@ export default function EnergyOfferCards() {
     }
   }, [searchParams]);
 
+  const handleCreateAd = () => {
+    if (activeTab === "buy") {
+      router.push("/dashboard/marketplace/create-buy-ads");
+    } else {
+      router.push("/dashboard/marketplace/create-sell-ads");
+    }
+  };
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
@@ -41,7 +49,9 @@ export default function EnergyOfferCards() {
                 <MemoFilters className="w-4 h-4" />
                 <p> More filters</p>
               </Button>
-              <Button className="bg-[#373D20] text-white hover:bg-[#373D20]">
+              <Button
+                onClick={handleCreateAd}
+                className="bg-[#373D20] text-white hover:bg-[#373D20]">
                 Create a {activeTab === "buy" ? "buy" : "sell"} ad
               </Button>
             </div>
