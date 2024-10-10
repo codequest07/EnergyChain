@@ -15,6 +15,8 @@ const pageTitles: { [key: string]: string } = {
   "/dashboard/marketplace": "Marketplace",
   "/dashboard/listing": "My listing",
   "/dashboard/account": "Account information",
+  "/dashboard/marketplace/buy": "Marketplace",
+  "/dashboard/marketplace/sell": "Marketplace",
 };
 const Header = () => {
   const pathname: string = usePathname();
