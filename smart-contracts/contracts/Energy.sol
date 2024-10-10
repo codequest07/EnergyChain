@@ -111,7 +111,7 @@ contract Energy is ReentrancyGuard{
     event ListingSuccessful(address indexed producer, uint units, uint rate);
     event UnitsUpdated(address indexed producer, uint energyCredits);
     event RateUpdated(address indexed producer, uint pricePerUnit);
-    event EnergyCreditsPurchased(address indexed buyer, address producer, uint creditAmount);
+    event EnergyCreditsPurchased(address indexed buyer, address producer, uint unitAmount);
 
 
     event WithdrawalSuccessful(address indexed producer, uint amount);
@@ -159,7 +159,7 @@ contract Energy is ReentrancyGuard{
      * @param user The address of the user making the transaction
     */
     function addTransaction(string memory typeOfTx, uint amount, uint units, address user) internal {
-        uint id = transactions[producer].length + 1;
+        uint id = transactions[user].length + 1;
         Transaction storage newTx = transactions[user].push();
         newTx.id = id;
         newTx.typeOfTx = typeOfTx;
@@ -168,7 +168,7 @@ contract Energy is ReentrancyGuard{
         newTx.timestamp = block.timestamp;
         newTx.user = user;
 
-        emit MarketActivity(user, typeOfTx, amount, units, timestamp);
+        emit MarketActivity(user, typeOfTx, amount, units, block.timestamp);
     }
 
     /**
@@ -204,11 +204,11 @@ contract Energy is ReentrancyGuard{
     */
     function updateEnergyCredits(uint _newCredits) external onlyProducer {
 
-        Listing[] storage listing = listings[msg.sender];
+        Listing storage listing = listings[msg.sender];
 
         if (msg.sender == address(0)) revert AddressZeroDetected();
-        if (listing.length == 0) revert NoListingsFound();
-        if (listings.producer != msg.sender) revert CallerNotProducer();
+        if (listing.producer == address(0)) revert NoListingsFound();
+        if (listing.producer != msg.sender) revert CallerNotProducer();
 
         if (listing.units == _newCredits) revert UpdatedpriceIsSame();
         if (_newCredits == 0) revert ZeroValueNotAllowed();
@@ -226,11 +226,11 @@ contract Energy is ReentrancyGuard{
     */
     function updateRate(uint _newRate) external onlyProducer {
 
-        Listing[] storage listing = listings[msg.sender];
+        Listing storage listing = listings[msg.sender];
 
         if (msg.sender == address(0)) revert AddressZeroDetected();
-        if (listing.length == 0) revert NoListingsFound();
-        if (listings.producer != msg.sender) revert CallerNotProducer();
+        if (listing.producer == address(0)) revert NoListingsFound();
+        if (listing.producer != msg.sender) revert CallerNotProducer();
 
         if (listing.rate == _newRate) revert UpdatedRateIsSame();
         if (_newRate == 0) revert ZeroValueNotAllowed();
@@ -256,7 +256,7 @@ contract Energy is ReentrancyGuard{
     /**
      * @dev Function for buyers to purchase energy credits from a specific producer
      * @param producer The address of the producer
-     * @param creditAmount The amount of energy credits to purchase
+     * @param unitAmount The amount of energy credits to purchase
     */
     function purchaseEnergyCredits(address producer, uint unitAmount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
