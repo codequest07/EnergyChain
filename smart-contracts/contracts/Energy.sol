@@ -3,13 +3,7 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-
-/**
- * @title Energy
- * @author [Your Name]
- * @notice This contract manages the energy credits marketplace. It allows producers to register and update their energy credits, buyers to purchase energy credits, and producers to withdraw their balance.
-*/
-contract Energy is ReentrancyGuard{
+contract Energy {
 
     /**
      * @dev Custom errors for the contract
@@ -29,10 +23,7 @@ contract Energy is ReentrancyGuard{
     error NoListingsFound();
 
     address public owner;
-    /**
-     * @dev The energy token contract
-    */
-    IERC20 public energyToken;
+address public energyToken;
 
     /**
      * @dev Array to store all producer addresses
@@ -52,7 +43,7 @@ contract Energy is ReentrancyGuard{
      * @dev Modifier to restrict access to only the owner
     */
     modifier onlyOwner {
-        if (msg.sender != owner) revert OnlyOwnerAllowed();
+    require(msg.sender == owner, "Only owner can call this function");
         _;
     }
 
@@ -91,41 +82,52 @@ event ProducerRegistered(address producer, uint energyCredits, uint pricePerUnit
     event EnergyCreditsTransferred(address from, address to, uint creditAmount);
     event EnergyUsageTracked(address buyer, uint usageAmount);
     event ProducerWithdrawal(address producer, uint amount);
+event Deposit(address user, uint amount);
 
 
     // Mapping to store registered producers
     mapping(address => Producer) public producers;
 
-    // Mapping to store balances of users
+// Mapping to store balances of users
     mapping(address => uint) public balances;
 
-// Mapping to store energy credits for buyers
-    mapping(address => mapping(address => uint)) public buyerCredits; // producer => buyer => credits
-    mapping(address => uint) public energyUsage;
+// Mapping to store transactions
+    mapping (address => Transaction[]) public transactions;
 
-    mapping (address => bool) public isUserProducer;
+    // Mapping to store listings
+    mapping (address => Listing) listings;
 
-    // Producers can register their available energy credits and the price per unit
-    function registerProducer(uint _energyCredits, uint _pricePerUnit) external {
-        if (msg.sender == address(0)) revert AddressZeroDetected();
-    if (_energyCredits == 0 || _pricePerUnit == 0) revert ZeroValueNotAllowed();
 
-        // Check if this producer is already in the system
-        if (producers[msg.sender].energyCredits != 0) revert ProducerAlreadyRegistered();
-        
-        // Register the producer with the provided details
-        producers[msg.sender] = Producer(msg.sender, _energyCredits, _pricePerUnit, 0);
 
-        // Add the new producer to the array
-        allProducerAddresses.push(msg.sender);
-        isUserProducer[msg.sender] = true;
-        
-        // Log the producer registration
-        emit ProducerRegistered(msg.sender, _energyCredits, _pricePerUnit);
+    // THIS FUNCTION SHOULD RETURN ALL LISTINGS FOR TEH MARKETPLACE. SHOULD NOT BE FOR ONLY ONE PRODUCER
+    function getAllListings() public view returns (Listing[]) {
+    
     }
 
+
+    // I CREATED THIS FUNCTION - WILL BE CALLED EVERY TIME A BUYER/PRODUCER MAKES A TRANSACTION IN MARKETPLACE
+    function addTransaction(string typeOfTx, uint amount, uint units, address producer) {
+        uint id = transactions[producer].length + 1;
+        Transaction tx = Transaction(id, typeOfTx, amount, units, block.timestamp, producer);
+        transactions[producer].push(tx);
+    }
+
+
+    // I CREATED THIS FUNCTION
+    function addListing(uint rate, uint units, uint minorder, uint maxorder) external {
+        if (msg.sender == address(0)) revert AddressZeroDetected();
+    if (rate == 0 || units == 0 || minorder == 0 || maxorder == 0) revert ZeroValueNotAllowed();
+        if (listings[msg.sender].length > 0) revert ProducerAlreadyRegistered();
+
+        uint id = listings[producer].length + 1;
+        ListingTransaction tx = ListingTransaction(id, units, rate, minorder, maxorder, block.timestamp, msg.sender []);
+        listings[producer].push(tx);
+
+        emit ListingSuccessful(producer, units, rate);
+    }
     
 
+    // I worked on this part
     // Producers can update the amount of energy credits they have available
     function updateEnergyCredits(uint _newCredits) external onlyProducer {
         if (msg.sender == address(0)) revert AddressZeroDetected();
@@ -158,20 +160,25 @@ event ProducerRegistered(address producer, uint energyCredits, uint pricePerUnit
         emit RateUpdated(msg.sender, _newRate);
     }
 
-// Buyers can purchase energy credits from a specific producer
+// ITE YOU ARE WORKING ON THIS, REFACTOR OR GET RID OF IT AND CREATE NEW FUNCTION
+    // Buyers can purchase energy credits from a specific producer
     // This transfers tokens from the buyer to the producer and updates both parties' credit balances
+     // [ITEOLUWA REFACTORED THIS FUNCTION]
     function purchaseEnergyCredits(address producer, uint creditAmount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (producer == address(0)) revert AddressZeroDetected();
         if (unitAmount == 0) revert ZeroValueNotAllowed();
         
-        Listing storage listing = listings[producer];
-        if (listing.producer == address(0)) revert NoListingsFound();
-        if (listing.units < unitAmount) revert NotEnoughEnergyCredits();
+    Producer storage _producer = producers[producer];
+        
+        // Make sure the producer has enough energy credits to sell
+        if (_producer.energyCredits < creditAmount) revert NotEnoughEnergyCredits();
         
         // Calculate how much the buyer needs to pay in tokens
-        uint totalCost = unitAmount * listing.rate;
-        if (depositedBalances[msg.sender] < totalCost) revert InsufficientTokenBalance();
+    uint totalCost = creditAmount * _producer.pricePerUnit;
+        
+        // Check if the buyer has enough tokens to make the purchase
+        if (IERC20(energyToken).balanceOf(msg.sender) < totalCost) revert InsufficientTokenBalance();
         
     // Transfer the tokens from the buyer to the producer
         bool success = IERC20(energyToken).transferFrom(msg.sender, address(this), totalCost);
@@ -212,6 +219,7 @@ event ProducerRegistered(address producer, uint energyCredits, uint pricePerUnit
     }
 
     // Allow producers to withdraw their balance
+    // [ITEOLUWA REFACTORED THIS FUNCTION]
     function withdraw(uint amount) external onlyProducer {
 
         if (msg.sender == address(0)) revert AddressZeroDetected();
@@ -221,12 +229,14 @@ event ProducerRegistered(address producer, uint energyCredits, uint pricePerUnit
         
         require(energyToken.transfer(msg.sender, amount), "Token transfer failed");
 
-        addTransaction("Withdrawal", amount, 0, msg.sender);
-        
-        emit WithdrawalSuccessful(msg.sender, amount);
+    bool success = IERC20(energyToken).transfer(msg.sender, amount);
+        if (!success) revert TransferFailed();
+
+        emit ProducerWithdrawal(msg.sender, amount);
     }
 
-// Get the balance of a producer
+// ITE YOU ARE WORKING ON THIS, REFACTOR OR GET RID OF IT AND CREATE NEW FUNCTION
+    // Get the balance of a producer
     function getBalance() external view onlyProducer returns (uint) {
         return producers[msg.sender].tokenBalance;
     }
@@ -240,14 +250,7 @@ event ProducerRegistered(address producer, uint energyCredits, uint pricePerUnit
      * @return The token balance of this contract
     */
     function getContractBalance() external view onlyOwner returns (uint) {
-        return energyToken.balanceOf(address(this));
-    }
-function getAllProducers() external view returns (Producer[] memory) {
-        Producer[] memory allProducers = new Producer[](allProducerAddresses.length);
-        for (uint i = 0; i < allProducerAddresses.length; i++) {
-            allProducers[i] = producers[allProducerAddresses[i]];
-        }
-        return allProducers;
+    return IERC20(energyToken).balanceOf(address(this));
     }
 
 }
