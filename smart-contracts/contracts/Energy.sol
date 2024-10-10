@@ -4,7 +4,7 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract Energy {
+contract Energy is ReentrancyGuard{
 
     error AddressZeroDetected();
     error ZeroValueNotAllowed();
@@ -21,18 +21,23 @@ contract Energy {
     error NoListingsFound();
 
     address public owner;
-    address public energyToken;
+    IERC20 public energyToken;
 
     // Array to store all producer addresses
     address[] private allProducerAddresses;
 
     constructor(address _energyToken) {
         owner = msg.sender;
-        energyToken = _energyToken;
+        energyToken = IERC20(_energyToken);
     }
 
     modifier onlyOwner {
-        require(msg.sender == owner, "Only owner can call this function");
+        if (msg.sender != owner) revert OnlyOwnerAllowed();
+        _;
+    }
+
+    modifier onlyProducer {
+        if (listings[msg.sender].producer == address(0)) revert OnlyProducerAllowed();
         _;
     }
 
@@ -71,6 +76,7 @@ contract Energy {
     event EnergyCreditsTransferred(address from, address to, uint creditAmount);
     event EnergyUsageTracked(address buyer, uint usageAmount);
     event ProducerWithdrawal(address producer, uint amount);
+    event Deposit(address user, uint amount);
 
     // Mapping to store balances of users
     mapping(address => uint) public balances;
@@ -79,35 +85,58 @@ contract Energy {
     mapping (address => Transaction[]) public transactions;
 
     // Mapping to store listings
-    mapping (address => Listing) listings;
+    mapping (address => Listing) public listings;
+
+    //  Mapping track deposited balances
+    mapping(address => uint) public depositedBalances;
 
 
 
     // THIS FUNCTION SHOULD RETURN ALL LISTINGS FOR TEH MARKETPLACE. SHOULD NOT BE FOR ONLY ONE PRODUCER
-    function getAllListings() public view returns (Listing[]) {
-    
+    // [ITEOLUWA WORKED THIS FUNCTION]
+    function getAllListings() public view returns (Listing[] memory) {
+        if (listings[msg.sender].producer == address(0)) revert OnlyProducerAllowed();
+        Listing[] memory allListings = new Listing[](allProducerAddresses.length);
+        for (uint i = 0; i < allProducerAddresses.length; i++) {
+            allListings[i] = listings[allProducerAddresses[i]];
+        }
+        return allListings;
     }
 
 
     // I CREATED THIS FUNCTION - WILL BE CALLED EVERY TIME A BUYER/PRODUCER MAKES A TRANSACTION IN MARKETPLACE
-    function addTransaction(string typeOfTx, uint amount, uint units, address producer) {
+    // [ITEOLUWA REFACTORED THIS FUNCTION]
+    function addTransaction(string memory typeOfTx, uint amount, uint units, address producer) internal {
         uint id = transactions[producer].length + 1;
-        Transaction tx = Transaction(id, typeOfTx, amount, units, block.timestamp, producer);
-        transactions[producer].push(tx);
+        Transaction storage newTx = transactions[producer].push();
+        newTx.id = id;
+        newTx.typeOfTx = typeOfTx;
+        newTx.amount = amount;
+        newTx.units = units;
+        newTx.timestamp = block.timestamp;
+        newTx.producer = producer;
     }
 
 
-    // I CREATED THIS FUNCTION
+    // I CREATED THIS FUNCTION [ITEOLUWA REFACTORED THIS FUNCTION]
     function addListing(uint rate, uint units, uint minorder, uint maxorder) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (rate == 0 || units == 0 || minorder == 0 || maxorder == 0) revert ZeroValueNotAllowed();
-        if (listings[msg.sender].length > 0) revert ProducerAlreadyRegistered();
+        if (listings[msg.sender].producer != address(0)) revert ProducerAlreadyRegistered();
 
-        uint id = listings[producer].length + 1;
-        ListingTransaction tx = ListingTransaction(id, units, rate, minorder, maxorder, block.timestamp, msg.sender []);
-        listings[producer].push(tx);
+        uint id = allProducerAddresses.length + 1;
+        listings[msg.sender].id = id;
+        listings[msg.sender].rate = rate;
+        listings[msg.sender].units = units;
+        listings[msg.sender].minorder = minorder;
+        listings[msg.sender].maxOrder = maxorder;
+        listings[msg.sender].timestamp = block.timestamp;
+        listings[msg.sender].producer = msg.sender;
+       
 
-        emit ListingSuccessful(producer, units, rate);
+        allProducerAddresses.push(msg.sender);
+
+        emit ListingSuccessful(msg.sender, units, rate);
     }
     
 
@@ -148,71 +177,76 @@ contract Energy {
         emit PriceUpdated(msg.sender, _newPrice);
     }
 
+    // [ITEOLUWA WORKED THIS FUNCTION]
+    function deposit(uint amount) external {
+        if (amount == 0) revert ZeroValueNotAllowed();
+        require(energyToken.transferFrom(msg.sender, address(this), amount), "Token transfer failed");
+        depositedBalances[msg.sender] += amount;
+        emit Deposit(msg.sender, amount);
+    }
+
     // ITE YOU ARE WORKING ON THIS, REFACTOR OR GET RID OF IT AND CREATE NEW FUNCTION
     // Buyers can purchase energy credits from a specific producer
     // This transfers tokens from the buyer to the producer and updates both parties' credit balances
+     // [ITEOLUWA REFACTORED THIS FUNCTION]
     function purchaseEnergyCredits(address producer, uint creditAmount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (producer == address(0)) revert AddressZeroDetected();
         if (creditAmount == 0) revert ZeroValueNotAllowed();
         
-        Producer storage _producer = producers[producer];
-        
-        // Make sure the producer has enough energy credits to sell
-        if (_producer.energyCredits < creditAmount) revert NotEnoughEnergyCredits();
+        Listing storage listing = listings[producer];
+        if (listing.producer == address(0)) revert NoListingsFound();
+        if (listing.units < creditAmount) revert NotEnoughEnergyCredits();
         
         // Calculate how much the buyer needs to pay in tokens
-        uint totalCost = creditAmount * _producer.pricePerUnit;
+        uint totalCost = creditAmount * listing.rate;
+        if (depositedBalances[msg.sender] < totalCost) revert InsufficientTokenBalance();
         
-        // Check if the buyer has enough tokens to make the purchase
-        if (IERC20(energyToken).balanceOf(msg.sender) < totalCost) revert InsufficientTokenBalance();
+        depositedBalances[msg.sender] -= totalCost;
+        balances[producer] += totalCost;
+      
+
+        uint transactionId = listing.transactions.length + 1;
+        listing.transactions.push(ListingTransaction(transactionId, creditAmount, listing.rate, totalCost, block.timestamp));
+
+        addTransaction("Purchase", totalCost, creditAmount, producer);
         
-        // Transfer the tokens from the buyer to the producer
-        bool success = IERC20(energyToken).transferFrom(msg.sender, address(this), totalCost);
-        if (!success) revert TransferFailed();
-
-        // Deduct the sold credits from the producer's balance
-        _producer.energyCredits -= creditAmount;
-
-        // add token to producers balance
-        _producer.tokenBalance += totalCost;
-
-        // Add the purchased credits to the buyer's balance
-        buyerCredits[producer][msg.sender] += creditAmount;
-
-        // Log the purchase of energy credits
         emit EnergyCreditsPurchased(msg.sender, producer, creditAmount);
     }
 
     // ITE YOU ARE WORKING ON THIS, REFACTOR OR GET RID OF IT AND CREATE NEW FUNCTION
     // Allow producers to withdraw their balance
+    // [ITEOLUWA REFACTORED THIS FUNCTION]
     function withdraw(uint amount) external onlyProducer {
 
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (amount == 0) revert ZeroValueNotAllowed();
         
-        Producer storage _producer = producers[msg.sender];
-        if (_producer.tokenBalance < amount) revert InsufficientBalance();
-
+        depositedBalances[msg.sender] -= amount;
         
-        // add token to producers balance
-        _producer.tokenBalance -= amount;
+        require(energyToken.transfer(msg.sender, amount), "Token transfer failed");
 
-        bool success = IERC20(energyToken).transfer(msg.sender, amount);
-        if (!success) revert TransferFailed();
-
+        addTransaction("Withdrawal", amount, 0, msg.sender);
+        
         emit ProducerWithdrawal(msg.sender, amount);
     }
 
     // ITE YOU ARE WORKING ON THIS, REFACTOR OR GET RID OF IT AND CREATE NEW FUNCTION
     // Get the balance of a producer
-    function getBalance() external view onlyProducer returns (uint) {
-        return producers[msg.sender].tokenBalance;
+     // [ITEOLUWA REFACTORED THIS FUNCTION]
+     function getBalance() external view returns (uint) {
+        if (listings[msg.sender].producer == address(0)) revert OnlyProducerAllowed();
+        return balances[msg.sender];
+    }
+
+    // I {ITEOLUWA} USED THIS TO TEST WHETHER MONEY I GOING INTO THE CONTRACT
+    function getDepositedBalance() external view returns (uint) {
+        return depositedBalances[msg.sender];
     }
 
     // Get the token balance of this contract
     function getContractBalance() external view onlyOwner returns (uint) {
-        return IERC20(energyToken).balanceOf(address(this));
+        return energyToken.balanceOf(address(this));
     }
 
 }
