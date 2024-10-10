@@ -4,8 +4,8 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import Link from "next/link";
 
 interface SellEnergyCardProps {
   id: number;
@@ -58,11 +58,14 @@ const SellEnergyCard: React.FC<SellEnergyCardProps> = ({
       </p>
     </CardContent>
     <CardFooter>
-      <Button className="p-0 bg-transparent hover:bg-transparent text-[#CD5334] shadow-none border-none">
+      <Link
+        href="marketplace/sell"
+        className="p-0 bg-transparent hover:bg-transparent text-[#CD5334] shadow-none border-none">
         Sell energy
-      </Button>
+      </Link>
     </CardFooter>
   </Card>
+  
 );
 
 export default SellEnergyCard;

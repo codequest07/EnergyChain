@@ -1,40 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { energyData, sellData } from "@/utils/data";
-
 import EnergyCard from "./EnergyCard";
 import SellEnergyCard from "./SellEnergyCard";
 import MemoFilters from "@/icons/Filters";
+import Link from "next/link";
 
-export default function EnergyOfferCards() {
-  const [activeTab, setActiveTab] = useState("buy");
+export default function MarketplacePage() {
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState<string>("buy");
+
+  useEffect(() => {
+    const tabFromUrl = searchParams.get("tab");
+    if (tabFromUrl && (tabFromUrl === "buy" || tabFromUrl === "sell")) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [searchParams]);
 
   return (
     <div className="container mx-auto p-4">
-      {/* Tab Triggers with Flexbox */}
       <div className="flex justify-between items-center mb-4">
-        <Tabs
-          defaultValue="buy"
-          className="w-full"
-          onValueChange={setActiveTab}>
+        <Tabs value={activeTab} className="w-full">
           <main className="sm:flex items-center justify-between">
             <TabsList className="flex w-[200px] space-x-4">
-              <TabsTrigger value="buy" className="flex-1 text-center">
-                Buy energy
-              </TabsTrigger>
-              <TabsTrigger value="sell" className="flex-1 text-center">
-                Sell energy
-              </TabsTrigger>
+              <Link href="/dashboard/marketplace?tab=buy" passHref>
+                <TabsTrigger value="buy" className="flex-1 text-center">
+                  Buy energy
+                </TabsTrigger>
+              </Link>
+              <Link href="/dashboard/marketplace?tab=sell" passHref>
+                <TabsTrigger value="sell" className="flex-1 text-center">
+                  Sell energy
+                </TabsTrigger>
+              </Link>
             </TabsList>
 
-            {/* Button container with Flexbox */}
             <div className="flex space-x-4 sm:justify-end">
               <Button variant="outline" className="flex space-x-2">
                 <MemoFilters className="w-4 h-4" />
-                <p> More filters</p>
+                <p>More filters</p>
               </Button>
               <Button className="bg-[#373D20] text-white hover:bg-[#373D20]">
                 Create a {activeTab === "buy" ? "buy" : "sell"} ad
@@ -44,16 +52,7 @@ export default function EnergyOfferCards() {
           <TabsContent value="buy">
             <div className="grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {energyData.map((energy, index) => (
-                <EnergyCard
-                  key={index}
-                  id={energy.id}
-                  savings={energy.savings}
-                  rating={energy.rating}
-                  price={energy.price}
-                  distance={energy.distance}
-                  quantity={energy.quantity}
-                  limit={energy.limit}
-                />
+                <EnergyCard key={index} {...energy} />
               ))}
             </div>
           </TabsContent>
@@ -62,18 +61,10 @@ export default function EnergyOfferCards() {
               {sellData.map((energy, index) => (
                 <SellEnergyCard
                   key={index}
-                  id={energy.id}
-                  savings={energy.savings}
-                  rating={energy.rating}
-                  price={energy.price}
-                  distance={energy.distance}
-                  quantity={energy.quantity}
-                  limit={energy.limit}
-                  type={energy.type}
+                  {...energy}
                   icon={
                     energy.icon ? <energy.icon className="w-5 h-5" /> : null
                   }
-                  expires={energy.expires}
                 />
               ))}
             </div>

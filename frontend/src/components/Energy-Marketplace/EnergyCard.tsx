@@ -7,6 +7,7 @@ import {
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import MemoStar from "@/icons/Star";
+import Link from "next/link";
 
 interface EnergyCardProps {
   id: number;
@@ -58,9 +59,11 @@ const EnergyCard: React.FC<EnergyCardProps> = ({
       </p>
     </CardContent>
     <CardFooter>
-      <Button className=" p-0 bg-transparent hover:bg-transparent text-[#CD5334] shadow-none border-none ">
+      <Link
+        href="marketplace/buy"
+        className="p-0 bg-transparent hover:bg-transparent text-[#CD5334] shadow-none border-none ">
         Buy energy
-      </Button>
+      </Link>
     </CardFooter>
   </Card>
 );
