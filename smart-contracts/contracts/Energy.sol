@@ -91,14 +91,13 @@ IERC20 public energyToken;
         ListingTransaction[] transactions;
     }
 
-event ListingSuccessful(address producer, uint units, uint rate);
-    event UnitsUpdated(address producer, uint energyCredits);
-    event PriceUpdated(address producer, uint pricePerUnit);
-    event EnergyCreditsPurchased(address buyer, address producer, uint creditAmount);
-    event EnergyCreditsTransferred(address from, address to, uint creditAmount);
-    event EnergyUsageTracked(address buyer, uint usageAmount);
-    event ProducerWithdrawal(address producer, uint amount);
-    event Deposit(address user, uint amount);
+/**
+     * @dev Events emitted by the contract
+    */
+    event ListingSuccessful(address indexed producer, uint units, uint rate);
+    event UnitsUpdated(address indexed producer, uint energyCredits);
+    event RateUpdated(address indexed producer, uint pricePerUnit);
+event EnergyCreditsPurchased(address indexed buyer, address producer, uint unitAmount);
 
 // Mapping to store balances of users
     mapping(address => uint) public balances;
@@ -122,17 +121,24 @@ event ListingSuccessful(address producer, uint units, uint rate);
         return allListings;
     }
 
-    // I CREATED THIS FUNCTION - WILL BE CALLED EVERY TIME A BUYER/PRODUCER MAKES A TRANSACTION IN MARKETPLACE
-    // [ITEOLUWA REFACTORED THIS FUNCTION]
-    function addTransaction(string memory typeOfTx, uint amount, uint units, address producer) internal {
+    /**
+     * @dev Function to add a transaction
+     * @param typeOfTx The type of transaction
+     * @param amount The amount of the transaction
+     * @param units The units of the transaction
+     * @param user The address of the user making the transaction
+    */
+    function addTransaction(string memory typeOfTx, uint amount, uint units, address user) internal {
         uint id = transactions[producer].length + 1;
-    Transaction storage newTx = transactions[producer].push();
+        Transaction storage newTx = transactions[user].push();
         newTx.id = id;
         newTx.typeOfTx = typeOfTx;
         newTx.amount = amount;
         newTx.units = units;
         newTx.timestamp = block.timestamp;
-        newTx.producer = producer;
+        newTx.user = user;
+
+        emit MarketActivity(user, typeOfTx, amount, units, block.timestamp);
     }
 
     // I CREATED THIS FUNCTION [ITEOLUWA REFACTORED THIS FUNCTION]
@@ -153,9 +159,14 @@ event ListingSuccessful(address producer, uint units, uint rate);
      * @param _newCredits The new amount of energy credits
     */
     function updateEnergyCredits(uint _newCredits) external onlyProducer {
-        if (msg.sender == address(0)) revert AddressZeroDetected();
 
-        if (producers[msg.sender].energyCredits == _newCredits) revert UpdatedpriceIsSame();
+        Listing storage listing = listings[msg.sender];
+
+        if (msg.sender == address(0)) revert AddressZeroDetected();
+        if (listing.producer == address(0)) revert NoListingsFound();
+        if (listing.producer != msg.sender) revert CallerNotProducer();
+
+    if (producers[msg.sender].energyCredits == _newCredits) revert UpdatedpriceIsSame();
 
         if (_newCredits == 0) revert ZeroValueNotAllowed();
 
@@ -166,14 +177,20 @@ event ListingSuccessful(address producer, uint units, uint rate);
         emit UnitsUpdated(msg.sender, _newCredits);
     }
 
-// I will work on this too
-    // Producers can update the price per energy unit they are selling
-    function updateRate(uint _newPrice) external onlyProducer {
+    /**
+     * @dev Function for producers to update the price per energy unit they are selling
+     * @param _newRate The new price per unit
+    */
+    function updateRate(uint _newRate) external onlyProducer {
+
+        Listing storage listing = listings[msg.sender];
 
         if (msg.sender == address(0)) revert AddressZeroDetected();
-        if (producers[msg.sender].pricePerUnit == _newPrice) revert UpdatedpriceIsSame();
-       
-        if (_newPrice == 0) revert ZeroValueNotAllowed();
+        if (listing.producer == address(0)) revert NoListingsFound();
+        if (listing.producer != msg.sender) revert CallerNotProducer();
+
+        if (listing.rate == _newRate) revert UpdatedRateIsSame();
+        if (_newRate == 0) revert ZeroValueNotAllowed();
 
         // Update the price per unit
         listing.rate = _newRate;
@@ -190,11 +207,12 @@ event ListingSuccessful(address producer, uint units, uint rate);
         emit Deposit(msg.sender, amount);
     }
 
-// ITE YOU ARE WORKING ON THIS, REFACTOR OR GET RID OF IT AND CREATE NEW FUNCTION
-    // Buyers can purchase energy credits from a specific producer
-    // This transfers tokens from the buyer to the producer and updates both parties' credit balances
-     // [ITEOLUWA REFACTORED THIS FUNCTION]
-    function purchaseEnergyCredits(address producer, uint creditAmount) external {
+    /**
+     * @dev Function for buyers to purchase energy credits from a specific producer
+     * @param producer The address of the producer
+     * @param unitAmount The amount of energy credits to purchase
+    */
+    function purchaseEnergyCredits(address producer, uint unitAmount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (producer == address(0)) revert AddressZeroDetected();
     if (creditAmount == 0) revert ZeroValueNotAllowed();
