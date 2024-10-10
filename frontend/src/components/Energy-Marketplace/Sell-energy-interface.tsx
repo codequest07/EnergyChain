@@ -8,8 +8,10 @@ import { Badge } from "../ui/badge";
 import MemoArrowLeft from "@/icons/ArrowLeft";
 import MemoChurch from "@/icons/Church";
 import { ApproveTransactionModal } from "./Approve-transaction-modal";
+import { useRouter } from "next/navigation";
 
 export default function SellEnergyInterface() {
+  const router = useRouter();
   const [energyAmount, setEnergyAmount] = useState("");
   const [amountToReceive, setAmountToReceive] = useState("--");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,13 +47,15 @@ export default function SellEnergyInterface() {
       setIsModalOpen(true);
     }
   };
-
+  const handleGoBack = () => {
+    router.back();
+  };
   return (
     <>
       <Card className="w-full max-w-xl mx-auto">
         <CardHeader className="flex items-start justify-between">
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="icon">
+            <Button onClick={handleGoBack} variant="ghost" size="icon">
               <MemoArrowLeft className="h-6 w-6" />
             </Button>
             <CardTitle className="text-base font-[500]">Sell energy</CardTitle>
