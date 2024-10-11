@@ -71,7 +71,7 @@ export default function ProsumerScoreCard({ className }: ProsumerScoreCardProps)
           </DropdownMenu>
         </div>
       </CardHeader> 
-      <CardContent className={`p-6 flex flex-col ${className}`}>
+      <CardContent className={`p-6 flex flex-col mt-44 ${className}`}>
         <MemoProsumerIcon className="w-24 h-24" />
         <h3 className="mt-4 text-sm text-[#575757] font-[400]">
           Energy balance

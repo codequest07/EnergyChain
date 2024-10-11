@@ -6,7 +6,7 @@ import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { config } from "@/utils/config";
 // import { getConfig } from "@/utils/config";
 import { OnchainKitProvider } from "@coinbase/onchainkit";
-import { base, baseSepolia } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 import { type ReactNode, useState } from "react";
 import { type State, WagmiProvider } from "wagmi";
 
@@ -25,9 +25,8 @@ export function Providers({ children, initialState }: Props) {
           <OnchainKitProvider
             apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
             // @ts-ignore
-            chain={baseSepolia}
-          >
-          {children}
+            chain={baseSepolia}>
+            {children}
           </OnchainKitProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
