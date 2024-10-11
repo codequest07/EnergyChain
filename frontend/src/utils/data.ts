@@ -535,3 +535,27 @@ export const metricsData = [
     bg: "text-[#CD533430]",
   },
 ];
+
+export const steps = [
+  {
+    number: "01",
+    title: "Connect your clean energy source",
+    description:
+      "Link your solar panels or other renewable setups to the network",
+    color: "bg-[#FFEFEB]",
+  },
+  {
+    number: "02",
+    title: "Share what you don't use",
+    description:
+      "Provide your excess energy to neighbors through a secure, decentralized system",
+    color: "bg-[#E6F6E4]",
+  },
+  {
+    number: "03",
+    title: "Track your impact",
+    description:
+      "See how much energy you've shared and emissions you've helped reduce, verified on the network",
+    color: "bg-[#EBE7F5]",
+  },
+];

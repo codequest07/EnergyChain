@@ -44,7 +44,7 @@ export default function FAQsection() {
       <h2 className="sm:text-3xl text-xl font-bold text-center mb-2">
         Your Questions Answered
       </h2>
-      <p className="text-center text-gray-600 mb-8">Explore Common Inquiries</p>
+
       <Accordion
         type="single"
         collapsible
