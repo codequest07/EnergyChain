@@ -1,7 +1,6 @@
-"use client"
+"use client";
 
-import { TrendingUp } from "lucide-react"
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -10,16 +9,16 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Button } from "./ui/button"
+} from "@/components/ui/chart";
+import { Button } from "./ui/button";
 
-export const description = "An area chart with axes"
+export const description = "An area chart with axes";
 
 const chartData = [
   { day: "Sunday", desktop: 186, mobile: 80 },
@@ -29,7 +28,7 @@ const chartData = [
   { day: "Thursday", desktop: 209, mobile: 130 },
   { day: "Friday", desktop: 214, mobile: 140 },
   { day: "Saturday", desktop: 214, mobile: 140 },
-]
+];
 
 const chartConfig = {
   desktop: {
@@ -40,19 +39,25 @@ const chartConfig = {
     label: "Mobile",
     color: "hsl(var(--chart-2))",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function TotalEnergyChart() {
   return (
     <Card className="w-full">
       <CardHeader>
         <div className="flex justify-between items-center">
-            <CardTitle>Total energy production (KWH)</CardTitle>
-            <div className="flex gap-2">
-                <Button className="text-xs bg-[#EFF1ED] text-[#21250F] hover:text-white rounded border-[1px] border-[#373D20]">7 days</Button>
-                <Button className="text-xs bg-[#EFF1ED] text-[#21250F] hover:text-white rounded border-[1px] border-[#373D20]">30 days</Button>
-                <Button className="text-xs bg-[#EFF1ED] text-[#21250F] hover:text-white rounded border-[1px] border-[#373D20]">90 days</Button>
-            </div>
+          <CardTitle>Total energy production (KWH)</CardTitle>
+          <div className="flex gap-2">
+            <Button className="text-xs bg-[#EFF1ED] text-[#21250F] hover:text-white rounded border-[1px] border-[#373D20]">
+              7 days
+            </Button>
+            <Button className="text-xs bg-[#EFF1ED] text-[#21250F] hover:text-white rounded border-[1px] border-[#373D20]">
+              30 days
+            </Button>
+            <Button className="text-xs bg-[#EFF1ED] text-[#21250F] hover:text-white rounded border-[1px] border-[#373D20]">
+              90 days
+            </Button>
+          </div>
         </div>
         <CardDescription>
           Showing total visitors for the last 6 months
@@ -66,8 +71,7 @@ export function TotalEnergyChart() {
             margin={{
               left: -20,
               right: 12,
-            }}
-          >
+            }}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="day"
@@ -109,11 +113,11 @@ export function TotalEnergyChart() {
               Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
             </div> */}
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                *Accounts only for markeplace activities
+              *Accounts only for markeplace activities
             </div>
           </div>
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

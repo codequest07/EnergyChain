@@ -4,7 +4,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import MemoStar from "@/icons/Star";
 import Link from "next/link";

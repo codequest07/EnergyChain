@@ -4,16 +4,8 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-/**
- * @title Energy
- * @author [Your Name]
- * @notice This contract manages the energy credits marketplace. It allows producers to register and update their energy credits, buyers to purchase energy credits, and producers to withdraw their balance.
-*/
 contract Energy is ReentrancyGuard{
 
-    /**
-     * @dev Custom errors for the contract
-    */
     error AddressZeroDetected();
     error ZeroValueNotAllowed();
     error ProducerAlreadyRegistered();
@@ -33,10 +25,7 @@ contract Energy is ReentrancyGuard{
      * @dev The owner of the contract
     */
     address public owner;
-    /**
-     * @dev The energy token contract
-    */
-    IERC20 public energyToken;
+IERC20 public energyToken;
 
     /**
      * @dev Array to store all producer addresses
@@ -56,13 +45,10 @@ contract Energy is ReentrancyGuard{
      * @dev Modifier to restrict access to only the owner
     */
     modifier onlyOwner {
-        if (msg.sender != owner) revert OnlyOwnerAllowed();
+    if (msg.sender != owner) revert OnlyOwnerAllowed();
         _;
     }
 
-    /**
-     * @dev Modifier to restrict access to only producers
-    */
     modifier onlyProducer {
         if (listings[msg.sender].producer == address(0)) revert OnlyProducerAllowed();
         _;
@@ -105,43 +91,27 @@ contract Energy is ReentrancyGuard{
         ListingTransaction[] transactions;
     }
 
-    /**
+/**
      * @dev Events emitted by the contract
     */
     event ListingSuccessful(address indexed producer, uint units, uint rate);
     event UnitsUpdated(address indexed producer, uint energyCredits);
     event RateUpdated(address indexed producer, uint pricePerUnit);
-    event EnergyCreditsPurchased(address indexed buyer, address producer, uint unitAmount);
+event EnergyCreditsPurchased(address indexed buyer, address producer, uint unitAmount);
 
-
-    event WithdrawalSuccessful(address indexed producer, uint amount);
-    event Deposit(address indexed user, uint amount);
-    event MarketActivity(address indexed user, string typeOfTx, uint amount, uint units, uint timestamp);
-
-    /**
-     * @dev Mapping to store balances of users
-    */
+// Mapping to store balances of users
     mapping(address => uint) public balances;
 
-    /**
-     * @dev Mapping to store transactions
-    */
+// Mapping to store transactions
     mapping (address => Transaction[]) public transactions;
 
-    /**
-     * @dev Mapping to store listings
-    */
+// Mapping to store listings
     mapping (address => Listing) public listings;
 
-    /**
-     * @dev Mapping to track deposited balances
-    */
+    //  Mapping track deposited balances
     mapping(address => uint) public depositedBalances;
-
-    /**
-     * @dev Function to get all listings for the marketplace
-     * @return An array of all listings
-    */
+// THIS FUNCTION SHOULD RETURN ALL LISTINGS FOR TEH MARKETPLACE. SHOULD NOT BE FOR ONLY ONE PRODUCER
+    // [ITEOLUWA WORKED THIS FUNCTION]
     function getAllListings() public view returns (Listing[] memory) {
         if (listings[msg.sender].producer == address(0)) revert OnlyProducerAllowed();
         Listing[] memory allListings = new Listing[](allProducerAddresses.length);
@@ -159,7 +129,7 @@ contract Energy is ReentrancyGuard{
      * @param user The address of the user making the transaction
     */
     function addTransaction(string memory typeOfTx, uint amount, uint units, address user) internal {
-        uint id = transactions[user].length + 1;
+        uint id = transactions[producer].length + 1;
         Transaction storage newTx = transactions[user].push();
         newTx.id = id;
         newTx.typeOfTx = typeOfTx;
@@ -171,31 +141,17 @@ contract Energy is ReentrancyGuard{
         emit MarketActivity(user, typeOfTx, amount, units, block.timestamp);
     }
 
-    /**
-     * @dev Function for producers to register their energy credits
-     * @param rate The rate per unit of energy credit
-     * @param units The number of energy credits available for sale
-     * @param minorder The minimum order size
-     * @param maxorder The maximum order size
-    */
+    // I CREATED THIS FUNCTION [ITEOLUWA REFACTORED THIS FUNCTION]
     function addListing(uint rate, uint units, uint minorder, uint maxorder) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
-        if (rate == 0 || units == 0 || minorder == 0 || maxorder == 0) revert ZeroValueNotAllowed();
-        if (listings[msg.sender].producer != address(0)) revert ProducerAlreadyRegistered();
+    if (rate == 0 || units == 0 || minorder == 0 || maxorder == 0) revert ZeroValueNotAllowed();
+        if (listings[msg.sender].length > 0) revert ProducerAlreadyRegistered();
 
-        uint id = allProducerAddresses.length + 1;
-        listings[msg.sender].id = id;
-        listings[msg.sender].rate = rate;
-        listings[msg.sender].units = units;
-        listings[msg.sender].minorder = minorder;
-        listings[msg.sender].maxOrder = maxorder;
-        listings[msg.sender].timestamp = block.timestamp;
-        listings[msg.sender].producer = msg.sender;
-       
+        uint id = listings[producer].length + 1;
+        ListingTransaction tx = ListingTransaction(id, units, rate, minorder, maxorder, block.timestamp, msg.sender []);
+        listings[producer].push(tx);
 
-        allProducerAddresses.push(msg.sender);
-
-        emit ListingSuccessful(msg.sender, units, rate);
+        emit ListingSuccessful(producer, units, rate);
     }
     
     /**
@@ -210,7 +166,8 @@ contract Energy is ReentrancyGuard{
         if (listing.producer == address(0)) revert NoListingsFound();
         if (listing.producer != msg.sender) revert CallerNotProducer();
 
-        if (listing.units == _newCredits) revert UpdatedpriceIsSame();
+    if (producers[msg.sender].energyCredits == _newCredits) revert UpdatedpriceIsSame();
+
         if (_newCredits == 0) revert ZeroValueNotAllowed();
 
         // Update the producer’s energy credits
@@ -239,13 +196,10 @@ contract Energy is ReentrancyGuard{
         listing.rate = _newRate;
 
         // Log the price update
-        emit RateUpdated(msg.sender, _newRate);
+    emit PriceUpdated(msg.sender, _newPrice);
     }
 
-    /**
-     * @dev Function for users to deposit tokens
-     * @param amount The amount of tokens to deposit
-    */
+    // [ITEOLUWA WORKED THIS FUNCTION]
     function deposit(uint amount) external {
         if (amount == 0) revert ZeroValueNotAllowed();
         require(energyToken.transferFrom(msg.sender, address(this), amount), "Token transfer failed");
@@ -261,34 +215,31 @@ contract Energy is ReentrancyGuard{
     function purchaseEnergyCredits(address producer, uint unitAmount) external {
         if (msg.sender == address(0)) revert AddressZeroDetected();
         if (producer == address(0)) revert AddressZeroDetected();
-        if (unitAmount == 0) revert ZeroValueNotAllowed();
+    if (creditAmount == 0) revert ZeroValueNotAllowed();
         
-        Listing storage listing = listings[producer];
+    Listing storage listing = listings[producer];
         if (listing.producer == address(0)) revert NoListingsFound();
-        if (listing.units < unitAmount) revert NotEnoughEnergyCredits();
+        if (listing.units < creditAmount) revert NotEnoughEnergyCredits();
         
         // Calculate how much the buyer needs to pay in tokens
-        uint totalCost = unitAmount * listing.rate;
+    uint totalCost = creditAmount * listing.rate;
         if (depositedBalances[msg.sender] < totalCost) revert InsufficientTokenBalance();
         
-        depositedBalances[msg.sender] -= totalCost;
+    depositedBalances[msg.sender] -= totalCost;
         balances[producer] += totalCost;
-
-        listing.units -= unitAmount;
+      
 
         uint transactionId = listing.transactions.length + 1;
-        listing.transactions.push(ListingTransaction(transactionId, unitAmount, listing.rate, totalCost, block.timestamp));
+        listing.transactions.push(ListingTransaction(transactionId, creditAmount, listing.rate, totalCost, block.timestamp));
 
-        addTransaction("Purchase", totalCost, unitAmount, msg.sender);
-        addTransaction("Sold", totalCost, unitAmount, producer);
+        addTransaction("Purchase", totalCost, creditAmount, producer);
         
-        emit EnergyCreditsPurchased(msg.sender, producer, unitAmount);
+        emit EnergyCreditsPurchased(msg.sender, producer, creditAmount);
     }
 
-    /**
-     * @dev Function for producers to withdraw their balance
-     * @param amount The amount to withdraw
-    */
+// ITE YOU ARE WORKING ON THIS, REFACTOR OR GET RID OF IT AND CREATE NEW FUNCTION
+    // Allow producers to withdraw their balance
+    // [ITEOLUWA REFACTORED THIS FUNCTION]
     function withdraw(uint amount) external onlyProducer {
 
         if (msg.sender == address(0)) revert AddressZeroDetected();
@@ -298,24 +249,20 @@ contract Energy is ReentrancyGuard{
         
         require(energyToken.transfer(msg.sender, amount), "Token transfer failed");
 
-        addTransaction("Withdrawal", amount, 0, msg.sender);
+    addTransaction("Withdrawal", amount, 0, msg.sender);
         
-        emit WithdrawalSuccessful(msg.sender, amount);
+        emit ProducerWithdrawal(msg.sender, amount);
     }
 
-    /**
-     * @dev Function to get the balance of a producer
-     * @return The balance of the producer
-    */
-    function getBalance() external view returns (uint) {
+// ITE YOU ARE WORKING ON THIS, REFACTOR OR GET RID OF IT AND CREATE NEW FUNCTION
+    // Get the balance of a producer
+     // [ITEOLUWA REFACTORED THIS FUNCTION]
+     function getBalance() external view returns (uint) {
         if (listings[msg.sender].producer == address(0)) revert OnlyProducerAllowed();
         return balances[msg.sender];
     }
 
-    /**
-     * @dev Function to get the deposited balance of a user
-     * @return The deposited balance of the user
-    */
+    // I {ITEOLUWA} USED THIS TO TEST WHETHER MONEY I GOING INTO THE CONTRACT
     function getDepositedBalance() external view returns (uint) {
         return depositedBalances[msg.sender];
     }
@@ -325,6 +272,6 @@ contract Energy is ReentrancyGuard{
      * @return The token balance of this contract
     */
     function getContractBalance() external view onlyOwner returns (uint) {
-        return energyToken.balanceOf(address(this));
+    return IERC20(energyToken).balanceOf(address(this));
     }
 }

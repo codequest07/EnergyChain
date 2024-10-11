@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Pencil, Home } from "lucide-react";
 import MemoPencil from "@/icons/Pencil";
 import { Badge } from "../ui/badge";
 
