@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import MemoCopy from "@/icons/Copy";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/hooks/use-toast";
+import { useAccountModal } from "@rainbow-me/rainbowkit";
 
 interface ProfileCardProps {
   name: string;
@@ -18,6 +19,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 }) => {
   const { toast } = useToast();
   const [mounted, setMounted] = useState(false);
+  const { openAccountModal } = useAccountModal();
 
   // Ensure component is mounted before rendering to prevent hydration errors
   useEffect(() => {
@@ -43,12 +45,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   }
 
   return (
-    <div className="flex items-center space-x-3 p-2 w-full">
+    <div className="flex items-center space-x-3 p-2 w-full" onClick={openAccountModal ? () => openAccountModal() : () => {}}>
       {/* Profile Image */}
       {profileImage}
 
       {/* Name and Wallet Address */}
-      <div className="flex flex-col w-3/5">
+      <div className="flex flex-col w-3/5 cursor-pointer" onClick={openAccountModal ? () => openAccountModal() : () => {}}>
         <span className="font-[500] truncate text-[#21250F]">{name}</span>
         <span className="text-sm truncate text-[#575757]">
           {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
