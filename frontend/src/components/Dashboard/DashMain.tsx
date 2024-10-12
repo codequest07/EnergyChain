@@ -12,7 +12,7 @@ const DashMain = () => {
     <div className="flex flex-col min-h-screen">
       <MainDashHeader />
       <div className="flex gap-4 p-4 md:p-5 pt-2">
-        <ProsumerScoreCard className="mt-44" />
+        <ProsumerScoreCard />
         <TotalEnergyChart />
       </div>
       <div className="p-4">
