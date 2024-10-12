@@ -17,54 +17,22 @@ import Image from "next/image";
 import { Basenames } from "@/components/basename";
 import {
   useAccount,
-  useConnect,
-  useDisconnect,
-  useConnectors,
 } from "wagmi";
-import { injected } from '@wagmi/connectors'
-import { baseSepolia } from "viem/chains";
 import { useRouter } from "next/navigation";
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 const CreateAccount = () => {
-  const { connect } = useConnect();
-  const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
-  const router = useRouter();
+  const { openConnectModal } = useConnectModal();
 
-  const [hasAttemptedConnection, setHasAttemptedConnection] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const router = useRouter();
   const [email, setEmail] = useState<string | undefined>();
 
   useEffect(() => {
-    // Disconnect on initial load
-    if (!isInitialized) {
-      disconnect();
-      setIsInitialized(true);
-    }
-  }, [disconnect, isInitialized]);
-
-  useEffect(() => {
-    if (isConnected && address && hasAttemptedConnection) {
+    if (isConnected && address) {
       router.push("/dashboard");
     }
-  }, [isConnected, address, hasAttemptedConnection, router]);
-
-  const handleConnect = () => {
-    setHasAttemptedConnection(true);
-    localStorage.setItem("hasConnected", "true");
-    connect({ chainId: baseSepolia.id, connector: injected() });
-  };
-
-  const handleDisconnect = () => {
-    disconnect();
-    localStorage.removeItem("hasConnected");
-    setHasAttemptedConnection(false);
-  };
-
-  // Don't render until we've handled the initial disconnect
-  if (!isInitialized) {
-    return null; // or a loading spinner
-  }
+  }, [isConnected, address, router]);
 
   return (
     <div className="bg-white h-full flex flex-col p-8">
@@ -88,20 +56,12 @@ const CreateAccount = () => {
         </div>
         <div className="my-8">
           {isConnected ? (
-            <div className="flex flex-col gap-4">
               <Basenames address={address} />
-              <Button
-                variant={"outline"}
-                className="text-red-500"
-                onClick={handleDisconnect}>
-                Disconnect (for testing)
-              </Button>
-            </div>
           ) : (
             <Button
               variant={"outline"}
               className="flex items-center font-medium p-4 gap-4"
-              onClick={handleConnect}>
+              onClick={openConnectModal ? () => openConnectModal() : () => {}}>
               <span className="text-[16px]">Connect your wallet</span>
               <span className="flex items-center gap-2">
                 <Image src={icon_wallet} alt="wallet icon" />
