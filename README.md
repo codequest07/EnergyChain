@@ -1,4 +1,4 @@
-# Energy Chain: Decentralized Energy Marketplace DApp on Scroll Sepolia
+# Energy Chain: Decentralized Energy Marketplace DApp on Base Sepolia
 
 ## Problem we aim to solve!
 
@@ -6,17 +6,17 @@ Our inspiration stems from the pressing issue of insufficient power supply in Af
 
 Check out our pitch deck here: https://drive.google.com/file/d/1DEHKmNRdKCEFtiYoxM8zxI__cjb_IBHK/view?usp=sharing
 
-check out our live demo vide here: https://drive.google.com/file/d/1DEHKmNRdKCEFtiYoxM8zxI__cjb_IBHK/view?usp=sharing
+check out our live demo vide here: --- demo video here
 
 
 ## Project Overview
 
-The **Decentralized Energy Marketplace** aims to revolutionize energy trading by creating a transparent, efficient, and user-friendly platform for energy producers and consumers. This innovative project will leverage blockchain technology to establish a single smart contract where energy producers can list their available energy credits, allowing for seamless and transparent transactions. The platform is built on the **SCROLL network**, leveraging its scalability and efficiency for energy transactions provided by the **ALCHEMY RPC-URL**
+The **Decentralized Energy Marketplace** aims to revolutionize energy trading by creating a transparent, efficient, and user-friendly platform for energy producers and consumers. This innovative project will leverage blockchain technology to establish a single smart contract where energy producers can list their available energy credits, allowing for seamless and transparent transactions. The platform is built on the **Base network**, leveraging its scalability and efficiency for energy transactions provided by the **ALCHEMY RPC-URL**
 
-Deployed Smart contract on Scroll Sepolia Testnet: https://sepolia.scrollscan.com/address/0xA1103E6490ab174036392EbF5c798C9DaBAb24EE
-https://sepolia.scrollscan.com/address/0x2C0457F82B57148e8363b4589bb3294b23AE7625#code
+Deployed Smart contract on Base Sepolia Testnet: https://sepolia.basescan.org/address/0x3335BaEEDdD1Cc77B8Ab9acBF862764812337a3F
+https://sepolia.basescan.org/address/0x9f3eB17a20a4E57Ed126F34061b0E40dF3a4f5C2
 
-Live Link to interact: https://energyy-chain.vercel.app/
+Live Link to interact: --live link here
 
 
 ### Objectives
@@ -33,7 +33,7 @@ Live Link to interact: https://energyy-chain.vercel.app/
 
 2. **On-Chain Tracking**: All transactions related to energy trades and transfers are recorded on-chain, ensuring transparency and traceability of energy credits. This feature enhances trust among participants and simplifies regulatory compliance.
 
-3. **Micro-Transactions Support**: By utilizing Scroll’s low transaction fees, the marketplace will support micro-transactions, making it feasible for consumers to purchase small amounts of energy credits without incurring prohibitive costs.
+3. **Micro-Transactions Support**: By utilizing Base’s low transaction fees, the marketplace will support micro-transactions, making it feasible for consumers to purchase small amounts of energy credits without incurring prohibitive costs.
 
 4. **Tokenization of Energy Credits**: Upon purchasing energy credits, buyers receive transferable tokens that represent their credits. These tokens are securely stored in their wallets, enabling easy transfers and trades within the marketplace.
 
@@ -54,7 +54,7 @@ Live Link to interact: https://energyy-chain.vercel.app/
 - Styling: Tailwind CSS
 - Smart Contracts: Solidity
 - Development Environment: Hardhat
-- Blockchain Network: Scroll (Testnet)
+- Blockchain Network: Base (Testnet)
 - RPC Provider: Alchemy
 - Deployment: Hardhat Ignition
 
@@ -143,7 +143,7 @@ npm install
 
 3. Create a `.env` file in the `smart-contracts` directory with the following content:
    ```
-   SCROLL_RPC_URL=<Your Alchemy Scroll Testnet RPC URL>
+   Base_RPC_URL=<Your Alchemy Base Testnet RPC URL>
    ACCOUNT_PRIVATE_KEY=<Your Ethereum account private key>
    ```
 
@@ -154,34 +154,34 @@ npm install
 
 ## Deployment
 
-The smart contracts are deployed to the Scroll Testnet using Alchemy's RPC URLs and API. Make sure to update the `hardhat.config.ts` file with the correct network configurations before deployment.
+The smart contracts are deployed to the Base Testnet using Alchemy's RPC URLs and API. Make sure to update the `hardhat.config.ts` file with the correct network configurations before deployment.
 
 ## Environment Variables
 
 Create a `.env` file in the `smart-contracts` directory with the following variables:
 
 ```
-ALCHEMY_SCROLL_RPC_URL=your_alchemy_scroll_rpc_url
+ALCHEMY_Base_RPC_URL=your_alchemy_Base_rpc_url
 ACCOUNT_PRIVATE_KEY=your_wallet_private_key
-SCROLLSCAN_API_KEY=your_scrollscan_api_key
+BaseSCAN_API_KEY=your_Basescan_api_key
 ```
 
-- To get your Alchemy scroll rpc url you have to sign up on [Alchemy](https://auth.alchemy.com/#:~:text=Log%20in.%20Don't%20have%20an%20account?%20Signup.) and head to your dashboard <https://dashboard.alchemy.com/> to get your alchemy scroll rpc url
-- To get your ScrollScan Api key you also have to sign up on [scrollscan](https://scrollscan.com/register) and then head to your dashboard to get your api key <https://scrollscan.com/myapikey>
+- To get your Alchemy Base rpc url you have to sign up on [Alchemy](https://auth.alchemy.com/#:~:text=Log%20in.%20Don't%20have%20an%20account?%20Signup.) and head to your dashboard <https://dashboard.alchemy.com/> to get your alchemy Base rpc url
+- To get your BaseScan Api key you also have to sign up on [Basescan](https://Basescan.com/register) and then head to your dashboard to get your api key <https://Basescan.com/myapikey>
 
 ## Deploying Smart Contracts
 
-To deploy the smart contracts to Scroll Sepolia:
+To deploy the smart contracts to Base Sepolia:
 
 ```bash
 cd hardhat-contracts
-npx hardhat ignition deploy ignition/modules/Energy.ts --network scroll_sepolia
+npx hardhat ignition deploy ignition/modules/Energy.ts --network Base_sepolia
 ```
 
-To verify the contract on ScrollScan:
+To verify the contract on BaseScan:
 
 ```bash
-npx hardhat verify YOUR_CONTRACT_ADDRESS --network scroll_sepolia
+npx hardhat verify YOUR_CONTRACT_ADDRESS --network Base_sepolia
 ```
 
 Replace `YOUR_CONTRACT_ADDRESS` with the address of your deployed contract.
