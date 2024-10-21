@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginSeller = exports.registerSeller = void 0;
+exports.getAllSellers = exports.getSellerById = exports.loginSeller = exports.registerSeller = void 0;
 const sellerModel_1 = __importDefault(require("../Models/sellerModel"));
 //import Web3 from 'web3';
 // Web3 setup for smart contract interaction
@@ -104,3 +104,29 @@ const loginSeller = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.loginSeller = loginSeller;
+const getSellerById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const seller = yield sellerModel_1.default.findById(id);
+        if (!seller) {
+            return res.status(404).json({ message: 'Seller not found' });
+        }
+        return res.status(200).json(seller);
+    }
+    catch (error) {
+        console.error('Error fetching this seller by ID:', error);
+        res.status(500).json({ message: 'Server error fetching this seller by ID' });
+    }
+});
+exports.getSellerById = getSellerById;
+const getAllSellers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const sellers = yield sellerModel_1.default.find();
+        return res.status(200).json(sellers);
+    }
+    catch (error) {
+        console.error('Error fetching all sellers:', error);
+        res.status(500).json({ message: 'Server error fetching all sellers' });
+    }
+});
+exports.getAllSellers = getAllSellers;

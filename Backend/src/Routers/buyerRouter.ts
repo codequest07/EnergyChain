@@ -19,7 +19,7 @@ router.post('/loginBuyer', async (req: Request, res: Response, next: NextFunctio
     }
 });
 
-router.get('/buyerById', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/buyerById/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         await getBuyerById(req, res);
     } catch (error) {

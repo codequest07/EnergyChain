@@ -24,4 +24,20 @@ router.post('/loginSeller', (req, res, next) => __awaiter(void 0, void 0, void 0
         next(error);
     }
 }));
+router.get('/sellerById/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, sellerController_1.getSellerById)(req, res);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
+router.get('/allSellers', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, sellerController_1.getAllSellers)(req, res);
+    }
+    catch (error) {
+        next(error);
+    }
+}));
 exports.default = router;
