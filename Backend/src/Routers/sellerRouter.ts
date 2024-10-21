@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { loginSeller, registerSeller } from '../controllers/sellerController';
+import { getAllSellers, getSellerById, loginSeller, registerSeller } from '../controllers/sellerController';
 
 const router = express.Router();
 
@@ -10,6 +10,22 @@ router.post('/loginSeller', async (req: Request, res: Response, next: NextFuncti
         await loginSeller(req, res);
     } catch (error) {
         next(error);
+    }
+});
+
+router.get('/sellerById/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await getSellerById(req, res);
+    } catch (error) {
+        next(error); 
+    }
+});
+
+router.get('/allSellers', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await getAllSellers(req, res);
+    } catch (error) {
+        next(error); 
     }
 });
 

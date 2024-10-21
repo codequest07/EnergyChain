@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginBuyer = exports.registerBuyer = void 0;
+exports.getAllBuyers = exports.getBuyerById = exports.loginBuyer = exports.registerBuyer = void 0;
 const buyerModel_1 = __importDefault(require("../Models/buyerModel"));
 const buyerMeters = [
     { meterNumber: 'BTR123', energyBought: 50, energyBalance: 100 },
@@ -97,3 +97,29 @@ const loginBuyer = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.loginBuyer = loginBuyer;
+const getBuyerById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const buyer = yield buyerModel_1.default.findById(id);
+        if (!buyer) {
+            return res.status(404).json({ message: 'Buyer not found' });
+        }
+        return res.status(200).json(buyer);
+    }
+    catch (error) {
+        console.error('Error fetching this buyer by ID:', error);
+        res.status(500).json({ message: 'Server error fetching this buyer by ID' });
+    }
+});
+exports.getBuyerById = getBuyerById;
+const getAllBuyers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const buyers = yield buyerModel_1.default.find();
+        return res.status(200).json(buyers);
+    }
+    catch (error) {
+        console.error('Error fetching all buyers:', error);
+        res.status(500).json({ message: 'Server error fetching all buyers' });
+    }
+});
+exports.getAllBuyers = getAllBuyers;
